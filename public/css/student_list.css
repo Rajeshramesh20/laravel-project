@@ -1,0 +1,150 @@
+  * {
+      padding: 0;
+      margin: 0;
+  }
+
+
+  table {
+      margin: auto;
+      border: 2px solid black;
+      border-collapse: collapse;
+      table-layout: auto;
+
+  }
+
+  th {
+      font-size: larger;
+  }
+
+  th,
+  td {
+      border: 2px solid black;
+      padding: 5px 10px;
+      /* text-align: center; */
+  }
+
+  .align {
+      text-align: center;
+  }
+
+  h1 {
+      text-align: center;
+      margin: 20px;
+  }
+
+  .delete {
+      text-decoration: none;
+      color: #FF5733;
+
+  }
+
+  .edite {
+      text-decoration: none;
+      color: blue;
+      padding: 15px;
+  }
+  .btn {
+      text-decoration: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: white;
+      width: 100px;
+      text-align: center;
+  }
+
+  .create {
+      background-color: #28a745;
+      display: inline-block;
+      margin-right: 10px;
+  }
+
+  .logout {
+      background-color: #007dff;
+    margin-right: 15px;
+  }
+
+  .logout:hover {
+
+      background-color: #1b68bb;
+  }
+
+  .create:hover {
+      background-color: #218838;
+  }
+
+  .logout_btn {
+
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-right: 80px;
+
+  }
+  form{
+    display: inline-block;
+  }
+
+  body {
+      background-image: url(../images/formbg3.png);
+      background-repeat: no-repeat;
+      background-size: cover;
+      /* background-position: center; */
+        height: auto;
+  }
+
+  .clear-btn {
+      text-decoration: none;
+      padding: 6px 24px;
+      background-color: #dc3545;
+      color: white;
+      border-radius: 5px;
+  }
+
+  .clear-btn:hover {
+      background-color: #c42232;
+  }
+
+
+  .table_btn {
+      padding: 8px 27px;
+      background-color: #007bff;
+      border: #007dff;
+      border-radius: 4px;
+      margin-right: 10px;
+  }
+.table_btn:hover{
+  background-color: #1b68bb;
+}
+  .table_view {
+      text-decoration: none;
+      color: #fff;
+  }
+
+  .show {
+      padding: 5px;
+      border: 1px solid #c8c3c3;
+      border-radius: 5px;
+      background: #dedede;
+  }
+  .logoutcontainer {
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 52px;
+      padding-top: 26px;
+  }
+
+  .header_container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: transparent;
+  }
+
+  .logo {
+      width: 100px;
+      height: 100px;
+      margin-left: 20px;
+  }
