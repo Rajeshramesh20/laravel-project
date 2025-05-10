@@ -31,7 +31,7 @@ class Student extends Model
 
     public function subjects()
     {
-        return $this->belongsToMany(Subjects::class, 'student_subject_mapings');
+        return $this->belongsToMany(Subjects::class, 'student_subject_mapings','id','subject_id');
     }
     public function student_subject_maping()
     {

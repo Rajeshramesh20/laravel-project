@@ -71,7 +71,8 @@
 </table>
 
 </div>
-{{-- <p>{{$students_data->links()}}</p> --}}
+
+<p>{{$students_data->links()}}</p>
 @endsection
  @section('footer')
    @include('layouts.form_footer')

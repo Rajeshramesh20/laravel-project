@@ -10,7 +10,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\student_subject_maping;
 
 
-class studentController extends Controller
+class StudentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -55,7 +55,7 @@ class studentController extends Controller
     public function show(Student $student)
     {
 
-        $students_data = Student::with(['groups', 'subjects'])->orderBy('id', 'desc')->get();
+        $students_data = Student::with(['groups', 'subjects'])->orderBy('id', 'desc')->paginate(1);
         return view('get_data', compact('students_data'));
 
         // $students_data = Student::orderBy('id', 'desc')->get();
