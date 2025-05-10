@@ -47,7 +47,7 @@
                 <td>{{ $data->class }}</td>
                 <td>{{ $data->batch }}</td>
                 <td>{{ $data->medium }}</td>   
-                <td><a href="{{ route('studentData.edit',$data->id)}}" class='edite'><i class='fas fa-edit' title='Edit'></i></a>
+                <td><a href="{{ route('studentData.edit',$data->id)}}" class='edite'><i class='fas fa-edit ' title='Edit'></i></a>
                     <form action="{{route('studentData.delete',$data->id)}}" method="POST">
                         @method('DELETE')
                         @csrf

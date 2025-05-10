@@ -9,7 +9,7 @@
       border: 2px solid black;
       border-collapse: collapse;
       table-layout: auto;
-
+      margin-bottom: 100px;
 
   }
 
@@ -153,10 +153,12 @@
       width: 100px;
       height: 100px;
       margin-left: 20px;
+      padding-top: 20px;
   }
 
   .footercontainer {
-      margin-top: 100px;
+   
+    text-align: center;
 
   }
 
@@ -183,7 +185,4 @@
   .fa-envelope {
       color: red;
       font-size: 30px;
-  }
-  .footerwrapper{
- text-align: center;
   }

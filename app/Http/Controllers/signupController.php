@@ -46,7 +46,7 @@ class signupController extends Controller
         $user->email = $request->input('email');
         $user->user_phone_num = $request->input('user_phone_num');
         $user->password = Hash::make($request->input('password'));
-        $user->save();
+        $user->save(); 
 
         Auth::login($user);
         return redirect()->route('login');

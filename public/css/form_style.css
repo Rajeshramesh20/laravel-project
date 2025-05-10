@@ -14,7 +14,7 @@ html {
     background-color: #fff;
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    margin-bottom: 0;
+    margin-bottom: 100px;
 }
 
 
@@ -204,6 +204,7 @@ span {
   width: 100px;
   height: 100px;
   margin-left: 20px; 
+  padding-top: 20px;
 }
 .create {
     background-color: #28a745;
@@ -212,4 +213,35 @@ span {
 }
   .create:hover {
       background-color: #218838;
+  }
+  .footercontainer {
+
+      text-align: center;
+      padding-bottom: 100px;
+
+  }
+
+  .icons {
+      padding: 20px;
+
+  }
+
+  .fa-whatsapp {
+      color: green;
+      font-size: 30px;
+  }
+
+  .fa-facebook {
+      color: #007bff;
+      font-size: 30px;
+  }
+
+  .fa-instagram {
+      color: rgb(246, 112, 112);
+      font-size: 30px;
+  }
+
+  .fa-envelope {
+      color: red;
+      font-size: 30px;
   }

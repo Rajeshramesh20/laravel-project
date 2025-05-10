@@ -79,12 +79,15 @@ a:hover {
 .wrapper {
     background-image: url('../images/background.jpg');
     background-size: cover;
-    height: 100vh;
+    /* height: 100vh; */
     background-position: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+.cover{
+    height: 100vh;
 }
 
 .signup-btn {
