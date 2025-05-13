@@ -25,7 +25,7 @@ class UpdateUserRequest extends FormRequest
         return [
             'firstname' => 'required',
             'lastname' => 'required',
-            'email' => 'required|unique:students,email,' . $id,
+            'email' => 'required|email|unique:students,email,' . $id,
             'mobile_number' => 'required|numeric|unique:students,mobile_number,' . $id,
             'medium' => 'required',
             'age' => 'required|integer',
@@ -33,8 +33,9 @@ class UpdateUserRequest extends FormRequest
             'date_of_birth' => 'nullable|date',
             'class' => 'nullable|string',
             'batch' => 'nullable|numeric',
-            'group_id' => 'nullable|in:1,2,3,4,5',
-            'Subjects' => 'nullable|in:1,2,3,4,5,6,7',
+            'group_id' => 'nullable|integer|in:1,2,3,4,5',
+            'subject_ids.*' => 'nullable',
+            
         ];
     }
     public function messages(): array

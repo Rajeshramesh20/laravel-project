@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\student_subject_maping;
+use App\Models\subjects;
 
 
 class StudentController extends Controller
@@ -17,7 +18,14 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
+        // $students = Student::all();
+        $students_data = Student::with(['group', 'subjects'])->orderBy('id', 'desc')->paginate(5);
+        $subjects = subjects::all();
+
+        return view('get_data', compact('students_data', 'subjects'));
+
+        // $students_data = Student::orderBy('id', 'desc')->get();
+        // return view('get_data', compact('students_data'));
     }
 
     /**
@@ -36,15 +44,24 @@ class StudentController extends Controller
 
         
         //    dd($request->all());
+        // $details = $request->validated();
+        // $data = Student::create($details);
+
         $details = $request->validated();
-        $data = Student::create($details);
-        $data->save();
-    //     //    echo "test";
-    //     $studenrId= student_subject_maping::firstOrCreate(['student_id'=>$data->id,
-    //         'group_id' => $data->group_id,
-    //         'subject_id' => $data->subject_ids,
-    // ]);
-        
+        $student=Student::create($details);
+        $student->save();
+        $student->subjects()->attach($request->subject_ids);
+
+
+        // if ($request->has('subject_ids') ) {
+        //     foreach ($request->subject_ids as $subjectId) {
+        //         student_subject_maping::create([
+        //             'subject_id' => $subjectId,
+        //         ]);
+        //     }
+        // }
+
+
 
         return redirect('/getdata');
     }
@@ -54,12 +71,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-
-        $students_data = Student::with(['groups', 'subjects'])->orderBy('id', 'desc')->paginate(1);
-        return view('get_data', compact('students_data'));
-
-        // $students_data = Student::orderBy('id', 'desc')->get();
-        // return view('get_data', compact('students_data'));
+   //
     }
 
     /**
@@ -69,7 +81,8 @@ class StudentController extends Controller
     {
       
         $edited_student = Student::findOrFail($id);
-        return view('edit_student_data', compact('edited_student'));
+        $studentSubjectIds = $edited_student->subjects->pluck('id')->toArray();
+        return view('edit_student_data', compact('edited_student', 'studentSubjectIds'));
     }
 
     /**
@@ -79,6 +92,10 @@ class StudentController extends Controller
     {
         $student = Student::find($id);
         $student->update($request->validated());
+
+        $subjectIds = $request->input('subject_ids', []);
+        $student->subjects()->sync($subjectIds);
+
         return redirect('/getdata');
     }
 
@@ -88,10 +105,29 @@ class StudentController extends Controller
     public function destroy($id)
     {
         $student = Student::find($id);
-
-        // $x = $student->toArray();
-        // dd($x);
         $student->delete();
         return redirect('/getdata');
+    }
+    public function search( Request $request){
+      $search_data=$request->search;
+        $firstname=$request->firstname;
+        $lastname=$request->lastname;
+        $email=$request->email;
+
+        $students_data = Student::with(['group', 'subjects'])
+            ->when($firstname, function ($query, $firstname) {
+                return $query->where('firstname', 'like', "%{$firstname}%");
+            })
+            ->when($lastname, function ($query, $lastname) {
+                return $query->where('lastname', 'like', "%{$lastname}%");
+            })
+            ->when($email, function ($query, $email) {
+                return $query->where('email', 'like', "%{$email}%");
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(5);
+        $subjects = subjects::all();
+        
+        return view('get_data', compact('students_data','subjects'));
     }
 }

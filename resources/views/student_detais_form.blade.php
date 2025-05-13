@@ -161,9 +161,9 @@
                     <th>
                         <label for="medium"> Medium :</label>
                     </th>
-                    <td> <input type="radio" value="Tamil" name="medium" id="tamil">
+                    <td> <input type="radio" value="Tamil" name="medium" id="tamil" >
                         <label for="tamil">Tamil</label>
-                        <input type="radio" value="English" name="medium" id="english">
+                        <input type="radio" value="English" name="medium" id="english" >
                         <label for="english">English</label>
                     </td>
                 </tr>
@@ -186,11 +186,11 @@
                     <td>
                         <select name="group_id" id="groupId">
                             <option value="" disabled selected> Select Group </option>
-                            <option value="1" {{ old('groupId')==1 ? 'selected' : '' }}>Biology</option>
-                            <option value="2" {{ old('groupId')==2 ? 'selected' : '' }}>Computer Science</option>
-                            <option value="3" {{ old('groupId')==3 ? 'selected' : '' }}>Commerce</option>
-                            <option value="4" {{ old('groupId')==4 ? 'selected' : '' }}>Computer Application</option>
-                            <option value="5" {{ old('groupId')==5 ? 'selected' : '' }}>Business Maths</option>
+                            <option value="1" {{ old('group_id')==1 ? 'selected' : '' }}>Biology</option>
+                            <option value="2" {{ old('group_id')==2 ? 'selected' : '' }}>Computer Science</option>
+                            <option value="3" {{ old('group_id')==3 ? 'selected' : '' }}>Commerce</option>
+                            <option value="4" {{ old('group_id')==4 ? 'selected' : '' }}>Computer Application</option>
+                            <option value="5" {{ old('group_id')==5 ? 'selected' : '' }}>Business Maths</option>
                         </select>
                     </td>
                 </tr>

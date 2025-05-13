@@ -7,10 +7,46 @@
 @include('layouts.form_header')
 @endsection
 @section('content')
-  
+<script>
+    function multiDropdown() {
+        const dropdown = document.getElementById('dropdownList');
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+    document.addEventListener('click', function (e) {
+        const dropdown = document.getElementById('dropdownList');
+        const btn = document.querySelector('.dropdown-btn');
+        if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+</script>
+
         {{-- <a href='{{route('create')}}' class='create btn'>Add New</a>   --}}
     {{-- <a  href="{{route('logout')}}" class='btn logout' >Logout</a> </div> --}}
     <div class="wrapper">
+        <div class="searchcontainer">
+        <form action="{{route('search')}}" name="search">
+         <input type="text" name="firstname" id="firstname"  class="searchbox" placeholder="search firstname">
+         <input type="text" name="lastname" id="lastname" class="searchbox"  placeholder="search lastname">
+         <input type="email" name="email" id="email"  class="searchbox"  placeholder="search email">
+         
+         <div class="dropdown-container">
+             <div class="dropdown-btn" onclick="multiDropdown()">Select Subjects</div>
+             <div class="dropdown-list" id="dropdownList">
+                 @foreach ($subjects as $subject)
+                     <label class="dropdown-item">
+                         <input type="checkbox" name="subject_ids[]" value="{{ $subject->id }}"
+                             {{ in_array($subject->id, old('subject_ids', $studentSubjectIds ?? [])) ? 'checked' : '' }}>
+                         {{ $subject->subjectname }}
+                     </label>
+                 @endforeach
+             </div>
+         </div>
+         
+
+         <button class="search-btn" type="submit">search</button>
+        </form>
+    </div>
     <h1> STUDENT DETAILS TABLE </h1>
     <table>
     <thead>
@@ -26,9 +62,9 @@
             <th>Class</th>
             <th>Batch</th>
             <th>Medium</th>
-            <th>Actions</th>
              <th>Groups</th>
             <th>Subjects</th>
+            <th>Actions</th>
            
         </tr>
     </thead>
@@ -47,23 +83,28 @@
                 <td>{{ $data->class }}</td>
                 <td>{{ $data->batch }}</td>
                 <td>{{ $data->medium }}</td>   
-                <td><a href="{{ route('studentData.edit',$data->id)}}" class='edite'><i class='fas fa-edit ' title='Edit'></i></a>
-                    <form action="{{route('studentData.delete',$data->id)}}" method="POST">
-                        @method('DELETE')
-                        @csrf
-                <button type="submit"  class='delete'><i class='fas fa-trash' title='Delete'></i></button>
-                    </form>
-            {{-- <a href="{{ route('studentData.delete',$data->id)}}">delete</a> --}}
-            </td>             
+                  
            <td>
-               @foreach($data->groups as $group)
+               {{-- @foreach($data->groups as $group)
                     {{ $group->groupname }}<br>
-                @endforeach
-                {{-- {{$data->groups}} --}}
-            </td>
+                @endforeach --}}
+                {{-- @dd($data->group) --}}
+                {{$data->group?->groupname}}
+               
+             
+            </td> 
             <td> @foreach($data->subjects as $subject)
                 {{ $subject->subjectname }}<br>
-            @endforeach</td>
+            @endforeach
+        </td>
+        <td><a href="{{ route('studentData.edit',$data->id)}}" class='edite'><i class='fas fa-edit ' title='Edit'></i></a>
+            <form action="{{route('studentData.delete',$data->id)}}" method="POST">
+                @method('DELETE')
+                @csrf
+        <button type="submit"  class='delete'><i class='fas fa-trash' title='Delete'></i></button>
+            </form>
+    {{-- <a href="{{ route('studentData.delete',$data->id)}}">delete</a> --}}
+    </td>           
       
             </tr>
         @endforeach

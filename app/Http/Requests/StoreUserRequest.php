@@ -27,13 +27,15 @@ class StoreUserRequest extends FormRequest
             'email' => 'required|unique:students,email|email',
             'mobile_number' => 'required|numeric|unique:students,mobile_number',
             'medium' => 'required',
-            'age'=> 'required|integer',
+            'age' => 'required|integer',
             'gender' => 'nullable|string',
             'date_of_birth' => 'nullable|date',
             'class' => 'nullable|string',
             'batch' => 'nullable|numeric',
-            'group_id' => 'nullable|array|in:1,2,3,4,5',
-            'Subjects'=> 'nullable|in:1,2,3,4,5,6,7',
+            // 'group_id' => 'nullable|integer|in:1,2,3,4,5',
+            'group_id'=>'required',
+            'subject_ids.*' => 'required',
+           
         ];
     }
     public function messages(): array

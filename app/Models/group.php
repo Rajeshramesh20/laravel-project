@@ -6,12 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\subjects;
 
-class group extends Model
+class Group extends Model
 {
     use HasFactory;
+
+    protected $table='groups';
+    protected $fillable = ['groupname'];
     public function students()
     {
-        return $this->belongsToMany(Student::class);
+        return $this->hasMany(Student::class);
     }
 
 }

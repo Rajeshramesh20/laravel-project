@@ -1,14 +1,19 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\group;
-use App\Models\subjects;
-use App\Models\student_subject_maping;
+use App\Models\Group;
+use App\Models\Subjects;
+
 
 class Student extends Model
 {
+    use HasFactory;
+
     protected $table = 'students';
+
     protected $fillable = [
         'firstname',
         'lastname',
@@ -20,23 +25,16 @@ class Student extends Model
         'class',
         'batch',
         'medium',
+        'group_id',
         'is_deleted',
     ];
-    use HasFactory;
-      
-    public function groups()
-    {
-        return $this->belongsToMany(group::class, 'student_subject_mapings');
-    }
 
+    public function group()
+    {
+        return $this->belongsTo(Group::class, 'group_id');
+    }
     public function subjects()
     {
-        return $this->belongsToMany(Subjects::class, 'student_subject_mapings','id','subject_id');
-    }
-    public function student_subject_maping()
-    {
-        return $this->hasMany(student_subject_maping::class);
+        return $this->belongsToMany(Subjects::class, 'student_subject_mapings', 'student_id', 'subject_id');
     }
 }
-
-

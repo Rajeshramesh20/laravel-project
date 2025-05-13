@@ -117,9 +117,9 @@
                         <th>
                             <label for="gender"> Gender :</label>
                         </th>
-                        <td> <input type="radio" value="Male" name="gender" id="male"  {{  $edited_student->gender == 'Male' ? 'checked' : '' }} >
+                        <td> <input type="radio" value="male" name="gender" id="male"  {{  $edited_student->gender == 'male' ? 'checked' : '' }} >
                             <label for="male">Male</label>
-                            <input type="radio" value="Female" name="gender" id="female"  {{  $edited_student->gender == 'Female' ? 'checked' : '' }}>
+                            <input type="radio" value="female" name="gender" id="female"  {{  $edited_student->gender == 'female' ? 'checked' : '' }}>
                             <label for="female">Female</label>
                         </td>
                     </tr>
@@ -171,9 +171,46 @@
 
                     </tr>
                     <tr>
+                        <th>
+                            <label for="groupId"> Groups:</label>
+                        </th>
+                        <td>
+                            <select name="group_id" id="groupId">
+                                <option value="" disabled selected> Select Group </option>
+                                <option value="1" {{  $edited_student->group_id == 1 ? 'selected' : '' }}>Biology</option>
+                                <option value="2" {{  $edited_student->group_id == 2 ? 'selected' : '' }}>Computer Science</option>
+                                <option value="3" {{  $edited_student->group_id == 3 ? 'selected' : ''  }}>Commerce</option>
+                                <option value="4" {{  $edited_student->group_id == 4 ? 'selected' : ''  }}>Computer Application</option>
+                                <option value="5" {{  $edited_student->group_id == 5 ? 'selected' : ''  }}>Business Maths</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for=""> Subjects:</label>
+                        </th>
+                        <td>
+                            <input type="checkbox" name="subject_ids[]" id="tamil" value="1" {{ in_array(1, $studentSubjectIds) ? 'checked' : '' }}>
+                            <label for="tamil">tamil</label>
+                            <input type="checkbox" name="subject_ids[]" id="Kannada" value="2" {{ in_array(2, $studentSubjectIds) ? 'checked' : '' }}>
+                            <label for="Kannada">Kannada</label>
+                            <input type="checkbox" name="subject_ids[]" id="Malayalam" value="3" {{ in_array(3, $studentSubjectIds) ? 'checked' : '' }}>
+                            <label for="Malayalam">Malayalam</label>
+                            <input type="checkbox" name="subject_ids[]" id="Telugu" value="4" {{ in_array(4, $studentSubjectIds) ? 'checked' : '' }}>
+                            <label for="Telugu">Telugu</label>
+                            <input type="checkbox" name="subject_ids[]" id="Hindi" value="5" {{ in_array(5, $studentSubjectIds) ? 'checked' : '' }}>
+                            <label for="Hindi">Hindi</label><br>
+                            <input type="checkbox" name="subject_ids[]" id="Sanskrit" value="6" {{ in_array(6, $studentSubjectIds) ? 'checked' : '' }}>
+                            <label for="Sanskrit">Sanskrit</label>
+                            <input type="checkbox" name="subject_ids[]" id="French" value="7" {{ in_array(7, $studentSubjectIds) ? 'checked' : '' }}>
+                            <label for="French">French</label>
+    
+                        </td>
+                    </tr>
+                    <tr>
                         <td colspan="2">
                             <input type="submit" name="submit" value="Update">
-                            <a href="" class="table_btn table_view">Back</a>
+                            <a href="{{route('getStudentData')}}" class="table_btn table_view">Back</a>
                         </td>
                     </tr>
                 </table>

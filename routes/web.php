@@ -12,11 +12,13 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
 Route::get('/students', [StudentController::class, 'create'])->name('create');
 Route::post('/student', [StudentController::class, 'store'])->name('studentForm.store');
-Route::get('/getdata', [StudentController::class, 'show'])->name('getStudentData');
+Route::get('/getdata', [StudentController::class, 'index'])->name('getStudentData');
 Route::get('/getdata/{id}/edit', [StudentController::class, 'edit'])->name('studentData.edit');
 Route::put('/getdata/{id}', [StudentController::class, 'update'])->name('studentData.update');
 Route::delete('/getdata/{id}/delete', [StudentController::class, 'destroy'])->name('studentData.delete');
 Route::get('logout', [signupController::class, 'logout'])->name('logout');
+Route::get('search', [StudentController::class, 'search'])->name('search');
+
 });
 
 Route::view('signup', 'auth.signup')->Middleware('guest')->name('signuppage');
