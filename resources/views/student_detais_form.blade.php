@@ -161,9 +161,9 @@
                     <th>
                         <label for="medium"> Medium :</label>
                     </th>
-                    <td> <input type="radio" value="Tamil" name="medium" id="tamil" >
+                    <td> <input type="radio" value="Tamil" name="medium" id="tamil"   {{ old('medium') == 'Tamil' ? 'checked' : '' }}>
                         <label for="tamil">Tamil</label>
-                        <input type="radio" value="English" name="medium" id="english" >
+                        <input type="radio" value="English" name="medium" id="english"  {{ old('medium') == 'English' ? 'checked' : '' }}>
                         <label for="english">English</label>
                     </td>
                 </tr>
@@ -199,20 +199,22 @@
                         <label for=""> Subjects:</label>
                     </th>
                     <td>
-                     
-                        <input type="checkbox" name="subject_ids[]" id="tamil" value="1">
+                     @php
+                         $oldSubjects= old('subject_ids',[]);
+                     @endphp
+                        <input type="checkbox" name="subject_ids[]" id="tamil" value="1" {{ in_array(1, $oldSubjects) ? 'checked' : '' }} >
                         <label for="tamil">tamil</label>
-                        <input type="checkbox" name="subject_ids[]" id="Kannada" value="2">
+                        <input type="checkbox" name="subject_ids[]" id="Kannada" value="2"  {{ in_array(2, $oldSubjects) ? 'checked' : '' }}>
                         <label for="Kannada">Kannada</label>
-                        <input type="checkbox" name="subject_ids[]" id="Malayalam" value="3">
+                        <input type="checkbox" name="subject_ids[]" id="Malayalam" value="3"  {{ in_array(3, $oldSubjects) ? 'checked' : '' }}>
                         <label for="Malayalam">Malayalam</label>
-                        <input type="checkbox" name="subject_ids[]" id="Telugu" value="4">
+                        <input type="checkbox" name="subject_ids[]" id="Telugu" value="4"  {{ in_array(4, $oldSubjects) ? 'checked' : '' }}>
                         <label for="Telugu">Telugu</label>
-                        <input type="checkbox" name="subject_ids[]" id="Hindi" value="5">
+                        <input type="checkbox" name="subject_ids[]" id="Hindi" value="5"  {{ in_array(5, $oldSubjects) ? 'checked' : '' }}>
                         <label for="Hindi">Hindi</label><br>
-                        <input type="checkbox" name="subject_ids[]" id="Sanskrit" value="6">
+                        <input type="checkbox" name="subject_ids[]" id="Sanskrit" value="6"  {{ in_array(6, $oldSubjects) ? 'checked' : '' }}>
                         <label for="Sanskrit">Sanskrit</label>
-                        <input type="checkbox" name="subject_ids[]" id="French" value="7">
+                        <input type="checkbox" name="subject_ids[]" id="French" value="7"  {{ in_array(7, $oldSubjects) ? 'checked' : '' }}>
                         <label for="French">French</label>
 
                     </td>

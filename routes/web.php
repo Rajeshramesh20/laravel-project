@@ -17,12 +17,14 @@ Route::get('/getdata/{id}/edit', [StudentController::class, 'edit'])->name('stud
 Route::put('/getdata/{id}', [StudentController::class, 'update'])->name('studentData.update');
 Route::delete('/getdata/{id}/delete', [StudentController::class, 'destroy'])->name('studentData.delete');
 Route::get('logout', [signupController::class, 'logout'])->name('logout');
-Route::get('search', [StudentController::class, 'search'])->name('search');
-
+Route::get('search', [StudentController::class, 'searchOrPdf'])->name('search');
+Route::get('excel', [StudentController::class, 'excelExport'])->name('excel');
+Route::get('pdf', [StudentController::class, 'pdfExport'])->name('pdf');
+// Route::get('xyz', [StudentController::class, 'show'])->name('abc');
+    Route::post('/students/import', [StudentController::class, 'importExcelData'])->name('students.import');
 });
 
 Route::view('signup', 'auth.signup')->Middleware('guest')->name('signuppage');
 Route::post('store', [signupController::class, 'store'])->name('user.register');
 Route::view('login', 'auth.login')->Middleware('guest')->name('login');
 Route::post('authenticate', [signupController::class, 'authenticate'])->name('authenticate');
-

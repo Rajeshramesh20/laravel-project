@@ -194,7 +194,7 @@
       cursor: pointer;
       background-color: #e757e2;
       color: white;
-      margin-right: 30px;
+      margin-right: 5px;
   }
  .search-btn:hover{
     background-color:  #e211db;    ;
@@ -221,6 +221,7 @@
     position: relative;
     width: 160px;
     display: inline-block;
+    margin-right: 20px;
 }
 
 .dropdown-btn {
@@ -251,4 +252,115 @@
 
 .dropdown-item input {
     margin-right: 6px;
+}
+.clear{
+    padding: 10px 30px;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+            margin-right: 20px;
+}
+.custom-multiselect-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 160px;
+    margin-right: 10px;
+}
+
+.custom-multiselect-toggle {
+    background-color: white;
+    padding: 7px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.custom-multiselect-container {
+    display: none;
+    /* Hidden by default */
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 5px;
+}
+
+.custom-multiselect {
+    width: 100%;
+    height: 120px;
+    border: none;
+    padding: 6px;
+    font-size: 14px;
+}
+option{
+    padding: 5px;
+}
+.download-btn{
+    background-color: #3592a5;
+    padding: 8px;
+    border-radius: 6px;
+        cursor: pointer;
+        color: white;
+        display: inline-block;
+            margin-right: 10px;
+            text-align: center;
+}
+.download-btn:hover{
+background-color: #1d788b;
+
+
+}
+.export-btn{
+    display: none;
+    border: 1px solid #ccc;
+    background: white; 
+    position: absolute;
+    padding: 8px 28px;
+    border-radius: 5px;
+}
+.dowload-link{
+    padding: 5px;
+    text-decoration: none;
+    color: black;
+}
+.dropdown{
+    display: inline-block;
+}
+.file-upload {
+    display: none;
+}
+
+.custom-file-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4f46e5;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.custom-file-label:hover {
+    background-color: #4338ca;
+}
+.submit-btn {
+    padding: 10px 20px;
+    background-color: #10b981;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    border: none;
+}
+
+.submit-btn:hover {
+    background-color: #059669;
 }

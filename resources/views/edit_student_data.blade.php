@@ -190,19 +190,19 @@
                             <label for=""> Subjects:</label>
                         </th>
                         <td>
-                            <input type="checkbox" name="subject_ids[]" id="tamil" value="1" {{ in_array(1, $studentSubjectIds) ? 'checked' : '' }}>
+                            <input type="checkbox" name="subject_ids[]" id="tamil" value="1"{{$edited_student->subjects->contains('id',1) ? 'checked' : '' }}>
                             <label for="tamil">tamil</label>
-                            <input type="checkbox" name="subject_ids[]" id="Kannada" value="2" {{ in_array(2, $studentSubjectIds) ? 'checked' : '' }}>
+                            <input type="checkbox" name="subject_ids[]" id="Kannada" value="2"{{$edited_student->subjects->contains('id',2) ? 'checked' : '' }}>
                             <label for="Kannada">Kannada</label>
-                            <input type="checkbox" name="subject_ids[]" id="Malayalam" value="3" {{ in_array(3, $studentSubjectIds) ? 'checked' : '' }}>
+                            <input type="checkbox" name="subject_ids[]" id="Malayalam" value="3" {{$edited_student->subjects->contains('id',3) ? 'checked' : '' }}>
                             <label for="Malayalam">Malayalam</label>
-                            <input type="checkbox" name="subject_ids[]" id="Telugu" value="4" {{ in_array(4, $studentSubjectIds) ? 'checked' : '' }}>
+                            <input type="checkbox" name="subject_ids[]" id="Telugu" value="4" {{$edited_student->subjects->contains('id',4) ? 'checked' : '' }}>
                             <label for="Telugu">Telugu</label>
-                            <input type="checkbox" name="subject_ids[]" id="Hindi" value="5" {{ in_array(5, $studentSubjectIds) ? 'checked' : '' }}>
+                            <input type="checkbox" name="subject_ids[]" id="Hindi" value="5"{{$edited_student->subjects->contains('id',5) ? 'checked' : '' }}>
                             <label for="Hindi">Hindi</label><br>
-                            <input type="checkbox" name="subject_ids[]" id="Sanskrit" value="6" {{ in_array(6, $studentSubjectIds) ? 'checked' : '' }}>
+                            <input type="checkbox" name="subject_ids[]" id="Sanskrit" value="6"{{$edited_student->subjects->contains('id',6) ? 'checked' : '' }}>
                             <label for="Sanskrit">Sanskrit</label>
-                            <input type="checkbox" name="subject_ids[]" id="French" value="7" {{ in_array(7, $studentSubjectIds) ? 'checked' : '' }}>
+                            <input type="checkbox" name="subject_ids[]" id="French" value="7" {{$edited_student->subjects->contains('id',7) ? 'checked' : '' }}>
                             <label for="French">French</label>
     
                         </td>

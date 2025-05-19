@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Models\student_subject_maping;
-use App\Models\subjects;
+use App\Services\StudentService;
+use PDF;
+
 
 
 class StudentController extends Controller
@@ -16,13 +16,15 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        // $students = Student::all();
-        $students_data = Student::with(['group', 'subjects'])->orderBy('id', 'desc')->paginate(5);
-        $subjects = subjects::all();
 
-        return view('get_data', compact('students_data', 'subjects'));
+    public function index(StudentService $studentService)
+    {
+        $search_data = [];
+        $students_data = Student::with(['group', 'subjects'])->orderBy('id', 'desc')->paginate(5);
+        $subjects = $studentService->getAllSubjects();
+        $groups = $studentService->getAllGroups();
+
+        return view('get_data', compact('students_data', 'subjects', 'search_data', 'groups'));
 
         // $students_data = Student::orderBy('id', 'desc')->get();
         // return view('get_data', compact('students_data'));
@@ -31,6 +33,8 @@ class StudentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+
+
     public function create()
     {
         return view('student_detais_form');
@@ -39,95 +43,108 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+
+    public function store(StoreUserRequest $request, StudentService $studentService )
     {
-
-        
-        //    dd($request->all());
-        // $details = $request->validated();
-        // $data = Student::create($details);
-
         $details = $request->validated();
-        $student=Student::create($details);
-        $student->save();
-        $student->subjects()->attach($request->subject_ids);
-
-
-        // if ($request->has('subject_ids') ) {
-        //     foreach ($request->subject_ids as $subjectId) {
-        //         student_subject_maping::create([
-        //             'subject_id' => $subjectId,
-        //         ]);
-        //     }
-        // }
-
-
-
+        $studentService->storeData($details);
         return redirect('/getdata');
     }
 
-    /**
+   /**
      * Display the specified resource.
-     */
-    public function show(Student $student)
+     */ 
+
+    public function show(Student $student  )
     {
-   //
+        $students_data = Student::with(['group', 'subjects'])->orderBy('id', 'asc')->get();
+        return view('PdfDownload', compact('students_data'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+
+    public function edit($id , StudentService $studentService)
     {
-      
-        $edited_student = Student::findOrFail($id);
-        $studentSubjectIds = $edited_student->subjects->pluck('id')->toArray();
-        return view('edit_student_data', compact('edited_student', 'studentSubjectIds'));
+        $edited_student = $studentService->editStudent($id);
+        return view('edit_student_data', compact('edited_student'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, $id)
+
+    public function update(UpdateUserRequest $request, $id , StudentService $studentService)
     {
-        $student = Student::find($id);
-        $student->update($request->validated());
-
-        $subjectIds = $request->input('subject_ids', []);
-        $student->subjects()->sync($subjectIds);
-
+        $data = $request->validated();
+        $studentService->updatestudent($data, $id);
         return redirect('/getdata');
     }
 
     /**
      * Remove the specified resource from storage.
      */
+
     public function destroy($id)
     {
         $student = Student::find($id);
         $student->delete();
         return redirect('/getdata');
     }
-    public function search( Request $request){
-      $search_data=$request->search;
-        $firstname=$request->firstname;
-        $lastname=$request->lastname;
-        $email=$request->email;
 
-        $students_data = Student::with(['group', 'subjects'])
-            ->when($firstname, function ($query, $firstname) {
-                return $query->where('firstname', 'like', "%{$firstname}%");
-            })
-            ->when($lastname, function ($query, $lastname) {
-                return $query->where('lastname', 'like', "%{$lastname}%");
-            })
-            ->when($email, function ($query, $email) {
-                return $query->where('email', 'like', "%{$email}%");
-            })
-            ->orderBy('id', 'desc')
-            ->paginate(5);
-        $subjects = subjects::all();
-        
-        return view('get_data', compact('students_data','subjects'));
+
+    public function searchOrPdf(Request $request, StudentService $studentService)
+    {
+        //$search_data=$request->search;
+
+        $search_data = $request->all();
+        $students_data = $studentService->searchStudents($search_data);
+        $subjects = $studentService->getAllSubjects();
+        $groups = $studentService->getAllGroups();
+
+        if($request->input('action')==='pdf'){
+            $pdf = PDF::loadView('PdfDownload', compact('students_data'));
+            return $pdf->download('filtered_students.pdf');
+        }
+
+        return view('get_data', compact('students_data', 'subjects', 'search_data', 'groups'));
+    }
+
+
+    public function pdfExport()
+
+    {
+        $students_data = Student::with(['group', 'subjects'])->orderBy('id', 'asc')->get();
+        $pdf = PDF::loadView('PdfDownload', compact('students_data'));
+        return $pdf->download('StudentsData.pdf');
+    }
+
+
+    // public function pdfExport(Request $request, StudentService $studentService)
+    // {
+    //     $search_data = $request->all();
+    //     $students_data = $studentService->searchStudents($search_data, false);
+    //     $pdf = PDF::loadView('PdfDownload', compact('students_data'));
+    //     return $pdf->download('filtered_students.pdf');
+    // }  
+
+
+    public function excelExport(StudentService $studentService)
+    {
+      return  $studentService->exportExcel();
+    }
+
+
+    public function importExcelData(Request $request , StudentService $studentService )
+    {  
+
+         $request->validate([
+            'file' => 'required|file',
+           ]);
+
+        $studentService->importExcelData($request );
+        return redirect()->back()->with('success','Students imported successfully!');
+
     }
 }
