@@ -1,6 +1,7 @@
     <?php
 
     use Illuminate\Support\Facades\Facade;
+use Laravel\Passport\PassportServiceProvider;
 
     return [
 
@@ -198,6 +199,7 @@
             App\Providers\RouteServiceProvider::class,
             Maatwebsite\Excel\ExcelServiceProvider::class,
             \Barryvdh\DomPDF\ServiceProvider::class,
+           
 
         ],
 

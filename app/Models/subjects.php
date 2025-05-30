@@ -15,4 +15,6 @@ class subjects extends Model
     {
         return $this->belongsToMany(Student::class);
     }
+
+    
 }

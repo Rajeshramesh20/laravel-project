@@ -25,7 +25,7 @@ class StudentImport implements ToCollection, WithHeadingRow
             $groupid = Group::where('groupname', $row['groupname'])->first();
             $subject = trim($row['subjects']);
             $subjectname = explode(',', $subject);
-            $subjectname = subjects::whereIn('subjectname', $subjectname)->pluck('id');
+            $subjectIds = subjects::whereIn('subjectname', $subjectname)->pluck('id')->toArray();
 
             $student = Student::updateOrCreate(['email' => $row['email']],[
                 'firstname' => $row['firstname'],
@@ -38,10 +38,12 @@ class StudentImport implements ToCollection, WithHeadingRow
                 'batch' => $row['batch'],
                 'medium' => $row['medium'],
                 'group_id' => $groupid ? $groupid->id : '',
+                'date_of_birth' => $row['date_of_birth'],
 
             ]);
-
-            $student->subjects()->sync($subjectname);
+            if (!empty($subjectIds)) {
+                $student->subjects()->syncWithoutDetaching($subjectIds);
+            }
         }
     }
 }

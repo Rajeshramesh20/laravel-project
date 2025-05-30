@@ -13,8 +13,9 @@
 <div class="form_bg">
     <h1 class="std_heading">Student Details Form</h1>
     <div class="container">
-        <h2 class="headding">Enter Your Details </h2>
-        <form action="{{route('studentForm.store')}}" method="post">
+            <h2 class="headding">Enter Your Details </h2>
+            <form action="{{route('studentForm.store')}}" method="post">
+            {{-- <form id="studentForm"> --}}
             @csrf
             <table>
                 <tr>
@@ -230,6 +231,7 @@
         </form>
     </div>
 </div>
+
 @endsection
 @section('footer')
 @include('layouts.form_footer')

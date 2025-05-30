@@ -45,4 +45,7 @@ class StoreUserRequest extends FormRequest
             'email.unique' => '* you entered email already exists',
         ];
     }
+
+
+    
 }

@@ -18,6 +18,7 @@ class StudentExport implements FromCollection, WithMapping, WithHeadings
     public function collection()
     {
      
+        // sleep(10);
         return Student::with(['group', 'subjects'])->get();
     }
     

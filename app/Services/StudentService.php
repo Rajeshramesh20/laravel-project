@@ -1,23 +1,35 @@
 <?php
+
 namespace App\Services;
+
 use App\Models\Student;
 use App\Models\subjects;
 use App\Models\Group;
+
 use App\Exports\StudentExport;
+
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\StudentImport;
-
-
+use App\Models\ExportInfo;
+use App\Jobs\ExportStudentsExcelJob;
+use Illuminate\Support\Facades\Auth;
+use App\Imports\StudentMobileNumberImportToFindStudentId;
+use App\Models\StudentMark;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UpdateUserRequest;
+
 
 class StudentService
 {
-   
-    public function searchStudents($filters )
+
+    //serched student list
+
+    public function searchStudents($filters, $paginate = true)
     {
-        $firstname = $filters['firstname']??'';
-        $lastname = $filters['lastname']??'' ;
-        $email = $filters['email'] ??'';
+        $firstname = $filters['firstname'] ?? '';
+        $lastname = $filters['lastname'] ?? '';
+        $email = $filters['email'] ?? '';
         $subjectIds = $filters['subject_ids'] ?? [];
         $groupIds = $filters['group_ids'] ?? [];
 
@@ -39,27 +51,38 @@ class StudentService
                     $data->whereIn('subjects.id', $subjectIds);
                 });
             })
-            ->orderBy('id', 'desc')
-            ->paginate(6);
-            return $response;
-
+            ->orderBy('id', 'desc');
+        if (!$paginate) {
+            $response = $response->get();
+        } else {
+            $response = $response->paginate(4);
+        }
+        return $response;
     }
 
-public function storeData($request){
+
+    // store student data
+
+    public function storeData($request)
+    {
         $student = Student::create($request);
         $student->save();
         $student->subjects()->attach($request['subject_ids']);
         return $student;
     }
 
+    // edit student data
 
-public function editStudent($id){
+    public function editStudent($id)
+    {
         $edited_student = Student::with('group', 'subjects')->findOrFail($id);
-        return    $edited_student;
+        return $edited_student;
     }
 
+    // update student data
 
-    public function updatestudent( $request, $id){
+    public function updatestudent($request, $id)
+    {
         $student = Student::find($id);
         $student->update($request);
         $subjectIds = $request['subject_ids'] ?? [];
@@ -68,34 +91,159 @@ public function editStudent($id){
     }
 
 
+    // get all subject from subject table
+
     public function getAllSubjects()
     {
         return subjects::all();
     }
 
 
+    // get all group from group table
 
     public function getAllGroups()
     {
         return Group::all();
+    }
 
+    // export excel student data
+
+    public function exportExcel()
+    {
+        $fileName = 'students_export_' . now()->format('Y_m_d_His') . '.csv';
+
+        $task = ExportInfo::create([
+            'user_id' => Auth::id(),
+            'file_name' => $fileName,
+            'status' => 'initiated',
+            'initiated_at' => now(),
+        ]);
+        ExportStudentsExcelJob::dispatch($task->id);
+        return $task;
+        // return Excel::download(new StudentExport, 'students.csv');
     }
 
 
-    public function exportExcel(){
+    //import student  data
 
-        return Excel::download(new StudentExport,'students.csv');  
-
-    }
-
-   public function importExcelData($request){
-
+    public function importExcelData($request)
+    {
 
         $file = $request->file('file');
 
         Excel::import(new StudentImport, $file);
-   }
+    }
 
+    //import mobile number to Assign mark 
+
+    public function importExcelModbileNumber($request)
+    {
+        $file = $request->file('file');
+        Excel::import(new StudentMobileNumberImportToFindStudentId, $file);
+    }
+
+    // get all students data from student table
+
+    public function grtAllstudentData()
+    {
+        $students_data = Student::with(['group', 'subjects'])->orderBy('id', 'desc')->paginate(5);
+        return $students_data;
+    }
+
+    //display export history
+
+    public function exportHistory()
+    {
+
+        $tasks = ExportInfo::with('user')->orderBy('created_at', 'desc')->get();
+        return $tasks;
+    }
+
+    // get mark from marks table and display mark
+
+    public function getmark()
+    {
+
+        $students = Student::whereHas('subjectsMark')
+            ->with(['group', 'subjectsMark'])->get();
+        $student_marks = [];
+        $sub_count = [];
+        foreach ($students as $student) {
+
+            foreach ($student->subjectsMark as $subject) {
+
+                $subname = $subject->subjectname;
+                $marks = $subject->pivot->mark;
+
+                if (!isset($student_marks[$subname])) {
+                    $student_marks[$subname] = 0;
+                    $sub_count[$subname] = 0;
+                }
+                $student_marks[$subname] += $marks;
+                $sub_count[$subname]++;
+            }
+        }
+        $sub_average = [];
+        foreach ($student_marks as $subject => $total) {
+            $sub_average[$subject] = round($total / $sub_count[$subject]);
+        }
+
+        $students = Student::whereHas('subjectsMark')
+            ->with(['group', 'subjectsMark'])
+            ->paginate(10);
+
+
+        $students->getCollection()->transform(function ($student) {
+            $marks = $student->subjectsMark->pluck('pivot.mark', 'subjectname')->toArray();
+            $total = array_sum($marks);
+            $average = round($total / count($marks));
+
+            return [
+                'id' => $student->id,
+                'name' => $student->firstname . ' ' . $student->lastname,
+                'group' => $student->group?->groupname,
+                'marks' => $marks,
+                'total' => $total,
+                'average' => $average,
+            ];
+        });
+
+        return [
+            'students' => $students,
+            'student_marks' => $student_marks,
+            'sub_average' => $sub_average
+        ];
+    }
+
+    //signup register user
+
+    public function register(array $data)
+    {
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'user_phone_num' => $data['user_phone_num'],
+            'password' => Hash::make($data['password']),
+            'role'=>$data['role'],
+        ]);
+
+        return $user;
+    }
+    //login athenticate user
+
+    public function authenticate($request)
+    {
+
+        $userData = [
+            'name' => $request['name'],
+            'password' => $request['password'],
+        ];
+        return  $userData;
+    }
+
+    // logout user
+    public function logout()
+    {
+        Auth::logout();
+    }
 }
-
-?>

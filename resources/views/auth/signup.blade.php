@@ -40,13 +40,15 @@
                  @endif
                 <label for="password_confirmation">confrim Password</label>
                 <input type="password" name="password_confirmation" id="password_confirmation" />
-                <p class="error">
-               
-                </p>
-                <p class="error">
-                  
-                </p>
 
+                <select name="role" id="role">
+                  <option value="" disabled selected>Select Role</option>
+                  <option value="superadmin" {{ old('role')=='superadmin' ? 'selected' : '' }}>Supper Admin</option>
+                  <option value="admin" {{ old('role')=='admin' ? 'selected' : '' }}> Admin</option>
+                  <option value="manager" {{ old('role')=='manager' ? 'selected' : '' }}>Manager</option>
+                  <option value="user" {{ old('role')=='user' ? 'selected' : '' }}>User</option>
+                </select>
+        
                 <div class="button-group">
                  {{-- <input type="submit" name="submit" id="submit"> --}}
                    <button type="submit" >Sign Up</button>
