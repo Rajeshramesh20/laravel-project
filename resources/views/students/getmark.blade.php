@@ -54,7 +54,6 @@
                     $total= array_sum($marks);
                     $avg=$total/count($marks);
                     $average=round($avg);
-
                 @endphp --}}
                 <td class="align">{{ $student['marks']['tamil'] ?? '' }}</td>
                 <td class="align">{{ $student['marks']['Kannada'] ?? '' }}</td>

@@ -27,8 +27,14 @@ class student extends JsonResource
             'class' => $this->class,
             'batch' => $this->batch,
             'medium' => $this->medium,
-            'group_id' => $this->group_id,
+            // 'group_id' => $this->group_id,
+            'group' => $this->group ? [
+                'id' => $this->group->id,
+                'groupname' => $this->group->groupname
+            ] : null,
+
             'subjects' => SubjectResource::collection($this->subjects),
+
         ];
     }
 }

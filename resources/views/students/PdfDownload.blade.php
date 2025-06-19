@@ -4,11 +4,7 @@
  {{-- <link rel="stylesheet" href="{{ asset('css/student_list.css') }}"> --}}
  {{-- <link rel="stylesheet" href="{{public_path('css/student_list.css') }}"> --}}
  <style>
-    @page {
-        margin: 20mm;
-        size: A4;
-    }
-
+  
     body {
         font-family: DejaVu Sans, sans-serif;
         font-size: 12px;
@@ -39,10 +35,6 @@
 
     .align {
         text-align: center;
-    }
-
-    .nowrap {
-        white-space: nowrap;
     }
 </style>
 @endsection

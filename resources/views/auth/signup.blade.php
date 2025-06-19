@@ -41,20 +41,20 @@
                 <label for="password_confirmation">confrim Password</label>
                 <input type="password" name="password_confirmation" id="password_confirmation" />
 
-                <select name="role" id="role">
+                <select name="role_id" id="role_id">
                   <option value="" disabled selected>Select Role</option>
-                  <option value="superadmin" {{ old('role')=='superadmin' ? 'selected' : '' }}>Supper Admin</option>
-                  <option value="admin" {{ old('role')=='admin' ? 'selected' : '' }}> Admin</option>
-                  <option value="manager" {{ old('role')=='manager' ? 'selected' : '' }}>Manager</option>
-                  <option value="user" {{ old('role')=='user' ? 'selected' : '' }}>User</option>
+                  <option value="1" {{ old('role')== 1 ? 'selected' : '' }}>Supper Admin</option>
+                  <option value="2" {{ old('role')== 2 ? 'selected' : '' }}> Admin</option>
+                  <option value="3" {{ old('role')== 3 ? 'selected' : '' }}>Manager</option>
+                  <option value="4" {{ old('role')== 4 ? 'selected' : '' }}>User</option>
                 </select>
         
                 <div class="button-group">
                  {{-- <input type="submit" name="submit" id="submit"> --}}
                    <button type="submit" >Sign Up</button>
                     
-                    <button type="reset" class="clear">clear</button>
-                    
+                    {{-- <button type="reset" class="clear">clear</button> --}}
+                    <a href="{{route('signuppage')}}" class="clear">clear</a>
                 </div>
             </form>
             <div class="sinupcontainer">

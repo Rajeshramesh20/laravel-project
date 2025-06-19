@@ -2,23 +2,27 @@
 @section('style')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/student_list.css') }}">
-@can('is_user')
+@can('is_user_or_manager')
 <style>
- .submit-btn{
-    padding: 10px 20px;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    border: none;
-    margin: 100px;
-}
-.searchcontainer {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 50px;
-}
-</style>  
+    .submit-btn {
+        padding: 10px 20px;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        border: none;
+        margin: 100px;
+        margin-right: 0px;
+    }
+    .searchcontainer {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 50px;
+    }
+    .mail{
+        margin-left: 10px;
+    }
+</style>
 @endcan
 
 @endsection
@@ -32,7 +36,7 @@
 <script>
     alert('{{ session('success')}}')
 </script>
-   
+
 
 @endif
 {{-- @if (session('error'))
@@ -85,6 +89,7 @@
 
 //export status modal
   document.addEventListener('DOMContentLoaded', function() {
+    
   const modal = document.getElementById("myModal");
   const openBtn = document.getElementById("openModalBtn");
   const closeBtn = document.getElementById("closeModalBtn");
@@ -159,47 +164,51 @@ function closeModal() {
             </div>
 
             <button class="search-btn" type="submit" name="action" value="search">search</button>
-           
+
             @can('is_superadmin_or_admin_or_manager')
-                
-         
+
+
             {{-- dropedown for export --}}
             <div class="dropdown" onclick="toggleDropdown()">
                 <span class="download-btn"><i class="fas fa-download"></i> Download</span>
                 <div id="exportDropdown" class="export-btn">
                     {{-- <a href="{{route('pdf')}}" class="dowload-link">PDF</a><br> --}}
-                    <button type="submit" name="action" class="dowload-link pdfbtn" value="pdf">PDF</button> <br> 
+                    <button type="submit" name="action" class="dowload-link pdfbtn" value="pdf">PDF</button> <br>
                     <a href="{{route('excel')}}" class="dowload-link">Excel</a>
-                    <i id="openModalBtn" class="fa-solid fa-circle-info info" ></i>
+                    <i id="openModalBtn" class="fa-solid fa-circle-info info"></i>
                 </div>
             </div>
             @endcan
             <a href="{{route('getStudentData')}}" class="clear">clear</a>
     </div>
-    
+
     </form>
     @can('is_superadmin_or_admin')
 
-<div class="importcontainer">
-    <form action="{{ route('students.import') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <input type="file" name="file" required class="file-upload" id="file" />
-        <label for="file" class="custom-file-label"><i class="fa fa-file-upload" style="margin-right: 8px;"></i>Choose
-            File</label>
+    <div class="importcontainer">
+        <form action="{{ route('students.import') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="file" name="file" required class="file-upload" id="file" />
+            <label for="file" class="custom-file-label"><i class="fa fa-file-upload"
+                    style="margin-right: 8px;"></i>Choose
+                File</label>
             <div class="dropdown" onclick="toggleImportDropdown()">
-                <span class="download-btn"><i class="fas fa-file-import"></i>  Import</span>
+                <span class="download-btn"><i class="fas fa-file-import"></i> Import</span>
                 <div id="importDropdown" class="export-btn" style="display: none;">
                     <button type="submit" name="action" value="student" class="submit-btn">Import Students</button><br>
                     <button type="submit" name="action" value="mobile" class="submit-btn">Import Mobile</button>
-                </div>
+                </div>  
             </div>
-    </form> 
-    @endcan
-<a href="{{route('getmark')}}" class="submit-btn getmark">Viwe student mark</a>
-</div>
-   
-    <h1> STUDENT DETAILS TABLE </h1>
+        </form>
+        @endcan
+        <a href="{{route('getmark')}}" class="submit-btn getmark">Viwe student mark</a>
+        @can('is_superadmin_or_admin_or_manager')
+        <a href="{{route('mailsend')}}"  class="submit-btn getmark mail" >send mail</a>  
+        @endcan
+    
+    </div>
 
+    <h1> STUDENT DETAILS TABLE </h1>
 
     <table>
         <thead>
@@ -220,7 +229,7 @@ function closeModal() {
                 @can('is_superadmin_or_admin')
                 <th>Actions</th>
                 @endcan
-               
+
             </tr>
 
         </thead>
@@ -241,27 +250,28 @@ function closeModal() {
                 <td>{{ $data->medium }}</td>
                 <td>
                     {{$data->group?->groupname}}
-                </td>
+                </td> 
                 <td>
                     @foreach($data->subjects as $subject)
                     {{ $subject->subjectname }}<br>
-                   
+
                     @endforeach
                 </td>
+                
                 @can('is_superadmin_or_admin')
                 <td>
-                     <a href="{{ route('studentData.edit',$data->id)}}" class='edite'><i class='fas fa-edit '
-                        title='Edit'></i></a>
-                     @endcan
-                   
-
-                            @can('is_superadmin')
-                            <form action="{{route('studentData.delete',$data->id)}}" method="POST">
-                                @method('DELETE')
-                                @csrf
-                                <button type="submit" class='delete' onclick="return confirm('Are you sure you want to delete this student?')"><i class='fas fa-trash' title='Delete'></i></button>
-                            </form>
-                            @endcan
+                    <a href="{{ route('studentData.edit',$data->id)}}" class='edite'><i class='fas fa-edit '
+                            title='Edit'></i></a>
+                    @endcan
+                    @can('is_superadmin')
+                    <form action="{{route('studentData.delete',$data->id)}}" method="POST">
+                        @method('DELETE')
+                        @csrf
+                        <button type="submit" class='delete'
+                            onclick="return confirm('Are you sure you want to delete this student?')"><i
+                                class='fas fa-trash' title='Delete'></i></button>
+                    </form>
+                    @endcan
                 </td>
             </tr>
             @endforeach
@@ -270,37 +280,38 @@ function closeModal() {
 </div>
 
 <div id="myModal" class="modal">
-  <div class="modal-content">
-    <i id="closeModalBtn" class="fa-solid fa-xmark close" style="font-size: 24px;"></i>
-    <h2>Export Excel History</h2>
-<table>
-    <tr>
-        <th>Id</th>
-        <th>User</th>
-        <th>File</th>
-        <th>Status</th>
-        <th>Initiated At</th>
-        <th>Completed At</th>
-        <th>Download</th>
-    </tr>
-    
-    @foreach($tasks as $task)
-    <tr>
-        <td>{{ $task->id}}</td>
-        <td>{{ $task->user->name ?? 'System' }}</td>
-        <td>{{ $task->file_name }}</td>
-        <td>{{ $task->status }}</td>
-        <td>{{ $task->initiated_at }}</td>
-        <td>{{ $task->completed_at }}</td>
-        <td>
-            @if($task->status == 'completed')
-            <a href="{{ asset('storage/exports/' . $task->file_name) }}"><i class="fas fa-download"></i>Download</a>
-            @endif
-        </td>
-    </tr>
-    @endforeach
-</table>
-  </div>
+    <div class="modal-content">
+        <i id="closeModalBtn" class="fa-solid fa-xmark close" style="font-size: 24px;"></i>
+        <h2>Export Excel History</h2>
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>User</th>
+                <th>File</th>
+                <th>Status</th>
+                <th>Initiated At</th>
+                <th>Completed At</th>
+                <th>Download</th>
+            </tr>
+
+            @foreach($tasks as $task)
+            <tr>
+                <td>{{ $task->id}}</td>
+                <td>{{ $task->user->name ?? 'System' }}</td>
+                <td>{{ $task->file_name }}</td>
+                <td>{{ $task->status }}</td>
+                <td>{{ $task->initiated_at }}</td>
+                <td>{{ $task->completed_at }}</td>
+                <td>
+                    @if($task->status == 'completed')
+                    <a href="{{ asset('storage/exports/' . $task->file_name) }}"><i
+                            class="fas fa-download"></i>Download</a>
+                    @endif
+                </td>
+            </tr>
+            @endforeach
+        </table>
+    </div>
 </div>
 
 {{--for pagination --}}
@@ -309,12 +320,12 @@ function closeModal() {
 {{-- error modal --}}
 <div id="errorModal" class="custom-modal">
     <div class="custom-modal-content">
-      <span class="custom-close" onclick="closeModal()">&times;</span>
-      <h2 class="error">Error</h2>
-      <p>{{ session('error') }}</p>
-      <button onclick="closeModal()">Close</button>
+        <span class="custom-close" onclick="closeModal()">&times;</span>
+        <h2 class="error">Error</h2>
+        <p>{{ session('error') }}</p>
+        <button onclick="closeModal()">Close</button>
     </div>
-  </div>
+</div>
 
 @endsection
 @section('footer')

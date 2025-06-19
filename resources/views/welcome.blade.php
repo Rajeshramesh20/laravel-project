@@ -9,6 +9,7 @@
         <div class="container">
             <h1 class="school-name">Wellcome To Bright School</h1>
             <a href="{{route('login')}}" class="login-btn">Login</a>
+            <a href="{{route('api.api.login')}}" class="login-btn">Api Login</a>
         </div>
     </div>
 @endsection

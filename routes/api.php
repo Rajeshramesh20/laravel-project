@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Apicontroller;
+use App\Http\Controllers\RoleController;
+use Maatwebsite\Excel\Row;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,21 +22,34 @@ use App\Http\Controllers\Apicontroller;
 // });
 
 
-Route::middleware(['auth:api'])->group(function(){
+Route::middleware(['auth:api'])->group(function () {
     Route::get('/getdata', [Apicontroller::class, 'index'])->name('getStudentData');
-    Route::post('/student', [Apicontroller::class, 'store'])->name('studentForm.store')->middleware('can:is_superadmin_or_admin_or_manager');
-    Route::get('/getdata/{id}', [Apicontroller::class, 'edit'])->name('studentData.edit')->middleware('can:is_superadmin_or_admin');
-    Route::put('/update/{id}', [Apicontroller::class, 'update'])->name('studentData.update')->middleware('can:is_superadmin_or_admin');
-    Route::delete('/delete/{id}', [Apicontroller::class, 'destroy'])->name('studentData.delete')->middleware('can:is_superadmin');
+    Route::post('/student', [Apicontroller::class, 'store'])->name('student.store');
+    Route::get('/getdata/{id}', [Apicontroller::class, 'edit'])->name('studentData.edit');
+    Route::put('/update/{id}', [Apicontroller::class, 'update'])->name('studentData.update');
+    Route::delete('/delete/{id}', [Apicontroller::class, 'destroy'])->name('studentData.delete');
     Route::get('search', [Apicontroller::class, 'searchOrPdf'])->name('search');
-    Route::post('/students/import', [Apicontroller::class, 'importExcelData'])->name('students.import')->middleware('can:is_superadmin_or_admin');
-    Route::get('excel', [Apicontroller::class, 'excelExport'])->name('excel')->middleware('can:is_superadmin_or_admin');
-    Route::get('getmark', [Apicontroller::class, 'getmark'])->name('getmark');
-    Route::get('logout', [Apicontroller::class, 'logout'])->name('logout');
- 
+    Route::post('/import', [Apicontroller::class, 'importExcelData'])->name('students.import');
+    Route::get('excel/{id}', [Apicontroller::class, 'excelExport'])->name('excel.export');
+    Route::get('excel', [Apicontroller::class, 'initiatedexcelExport'])->name('excel.export.initiate');
+    Route::get('/export-history', [Apicontroller::class, 'exportHistory'])->name('export.history');
 
+    Route::get('getmark', [Apicontroller::class, 'getmark'])->name('getmark');
+
+    Route::post('sendmail',[Apicontroller::class, 'SendEmail']);
+    Route::get('logout', [Apicontroller::class, 'logout'])->name('logout');
+    
+    // Route::get('getdata',[Apicontroller::class, 'getData']);
 });
 
 Route::post('register', [Apicontroller::class, 'register'])->name('user.register');
 Route::post('authenticate', [Apicontroller::class, 'authenticate'])->name('authenticate');
- 
+
+//forgot password
+Route::post('/forgot-password', [Apicontroller::class, 'submitforgotpasswordformapi']);
+
+Route::post('/reset-password', [Apicontroller::class, 'submitResetPasswordForm']);
+
+
+//add role
+Route::post('role',[RoleController::class, 'store']);

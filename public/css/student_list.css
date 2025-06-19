@@ -42,7 +42,8 @@
   .edite {
       text-decoration: none;
       color: blue;
-      padding: 15px;
+      /* padding: 15px; */
+      margin-right: 10px;
   }
 
   .btn {
@@ -416,11 +417,11 @@ background-color: #1d788b;
 }
 .getmark{
     /* color: black; */
-    background-color: #bea945;
+    background-color:#cab343;
     text-decoration: none;
 }
 .getmark:hover{
-    background-color: #dcca73;
+    background-color:#bea945 ;
 }
 .importcontainer{
     display: flex;

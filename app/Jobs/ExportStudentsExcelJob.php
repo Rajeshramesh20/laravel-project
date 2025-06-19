@@ -10,32 +10,9 @@ use Illuminate\Queue\SerializesModels;
 use App\Exports\StudentExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\ExportInfo;
+use Exception;
 
 
-// class ExportStudentsExcelJob implements ShouldQueue
-// {
-//     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-//     /**
-//      * Create a new job instance.
-//      */
-
-//     protected $fileName;
-
-//     public function __construct($fileName)
-//     {
-//         $this->fileName = $fileName;
-//     }
-
-//     public function handle(): void
-//     {
-//         // Save Excel file to storage/app/exports
-//         Excel::store(new StudentExport, 'public/exports/' . $this->fileName);
-//     }
-
-
-
-// }
 
 class ExportStudentsExcelJob implements ShouldQueue
 {
@@ -61,7 +38,7 @@ class ExportStudentsExcelJob implements ShouldQueue
                 'status' => 'completed',
                 'completed_at' => now(),
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $task->update([
                 'status' => 'error',
                 'error_message' => $e->getMessage(),

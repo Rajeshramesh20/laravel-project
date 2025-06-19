@@ -2,22 +2,20 @@
 
 namespace App\Services;
 
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+
 use App\Models\Student;
 use App\Models\subjects;
 use App\Models\Group;
-
-use App\Exports\StudentExport;
-
-use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\StudentImport;
 use App\Models\ExportInfo;
-use App\Jobs\ExportStudentsExcelJob;
-use Illuminate\Support\Facades\Auth;
+
 use App\Imports\StudentMobileNumberImportToFindStudentId;
-use App\Models\StudentMark;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\UpdateUserRequest;
+use App\Imports\StudentImport;
+use App\Jobs\ExportStudentsExcelJob;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 
 class StudentService
@@ -52,10 +50,13 @@ class StudentService
                 });
             })
             ->orderBy('id', 'desc');
+
+        // dd($response->toSql());   
+
         if (!$paginate) {
             $response = $response->get();
         } else {
-            $response = $response->paginate(4);
+            $response = $response->paginate(6);
         }
         return $response;
     }
@@ -106,8 +107,7 @@ class StudentService
         return Group::all();
     }
 
-    // export excel student data
-
+    // export excel student data   
     public function exportExcel()
     {
         $fileName = 'students_export_' . now()->format('Y_m_d_His') . '.csv';
@@ -122,7 +122,6 @@ class StudentService
         return $task;
         // return Excel::download(new StudentExport, 'students.csv');
     }
-
 
     //import student  data
 
@@ -144,7 +143,7 @@ class StudentService
 
     // get all students data from student table
 
-    public function grtAllstudentData()
+    public function getAllstudentData()
     {
         $students_data = Student::with(['group', 'subjects'])->orderBy('id', 'desc')->paginate(5);
         return $students_data;
@@ -163,7 +162,6 @@ class StudentService
 
     public function getmark()
     {
-
         $students = Student::whereHas('subjectsMark')
             ->with(['group', 'subjectsMark'])->get();
         $student_marks = [];
@@ -184,6 +182,7 @@ class StudentService
             }
         }
         $sub_average = [];
+
         foreach ($student_marks as $subject => $total) {
             $sub_average[$subject] = round($total / $sub_count[$subject]);
         }
@@ -214,36 +213,14 @@ class StudentService
             'sub_average' => $sub_average
         ];
     }
-
-    //signup register user
-
-    public function register(array $data)
+    public function sendEmail($data)
     {
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'user_phone_num' => $data['user_phone_num'],
-            'password' => Hash::make($data['password']),
-            'role'=>$data['role'],
-        ]);
-
-        return $user;
-    }
-    //login athenticate user
-
-    public function authenticate($request)
-    {
-
-        $userData = [
-            'name' => $request['name'],
-            'password' => $request['password'],
-        ];
-        return  $userData;
-    }
-
-    // logout user
-    public function logout()
-    {
-        Auth::logout();
+        Mail::send(
+            'mail.welcomeEmail',
+            ['data' => $data['message']],
+            function ($mail) use ($data) {
+                $mail->to($data['email'])->subject($data['subject']);
+            }
+        );
     }
 }

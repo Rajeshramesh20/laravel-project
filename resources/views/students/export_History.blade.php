@@ -9,10 +9,7 @@
         padding: 5px;
         margin: auto;
         margin-top: 50px;
-
-
     }
-
     h2 {
         text-align: center;
         margin-top: 50px;
