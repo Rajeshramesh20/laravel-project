@@ -34,7 +34,7 @@ class student extends JsonResource
             ] : null,
 
             'subjects' => SubjectResource::collection($this->subjects),
-
+            
         ];
     }
 }

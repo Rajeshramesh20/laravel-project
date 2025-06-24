@@ -12,12 +12,14 @@ class Roles extends Model
     use HasFactory;
     protected $table= 'roles';
    protected $fillable =[
-        'RoleName'
+        'name'
    ];
+   
     public function user()
     {
         return $this->hasMany(User::class);
     }
+
     public function menuPermissions()
     {
         return $this->hasMany(RoleMenuPermission::class);

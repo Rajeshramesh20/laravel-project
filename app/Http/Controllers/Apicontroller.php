@@ -25,7 +25,6 @@ use App\Models\ExportInfo;
 
 use App\Services\StudentService;
 use App\Services\AuthServices;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;    
 
 class Apicontroller extends Controller
@@ -35,17 +34,38 @@ class Apicontroller extends Controller
     public function index(StudentService $studentService)
     {
         try {
-            if (Gate::denies('access-menu', ['getStudentData', 'fullaccess'])) {
+            if (Gate::denies('access-menu', ['StudentList', 'viewonly'])) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized: No full access to create student.',
                 ], 403);
             }
             $students_data = $studentService->getAllstudentData();
+            $user= Auth::user();
         
 
             if ($students_data) {
-                return  studentResources::collection($students_data);
+                return response()->json(
+                    [
+                        'status' => true,
+                        'message' => 'success',
+                        'data'=> studentResources::collection($students_data),
+                        'meta'=>['current_page'=> $students_data->currentPage(),
+                            'last_page' => $students_data->lastPage(),
+                    ],
+                    'user'=>['role'=>$user->roles->name,
+                            'can_delete' => Gate::allows('access-menu', ['deleteStudent', 'fullaccess']),
+                            'can_edit'=> Gate::allows('access-menu', ['updatestudent', 'fullaccess']),
+                            'can_addStudent'=>Gate::allows('access-menu',['storeStudent','fullaccess']),
+                            'can_import'=>Gate::allows('access-menu',['importStudent','fullaccess']) ,
+                            'can_mail'=>Gate::allows('access-menu',['sendMail','fullaccess']),
+                            'can_export'=>Gate::allows('access-menu',['exportStudent','fullaccess']),
+                           
+                        ]
+                            
+                    ]
+                );
+                
               
             } else {
                 return response()->json(
@@ -67,9 +87,7 @@ class Apicontroller extends Controller
     {
         try {
 
-            // if (Gate::denies('is_user')) {
-
-                if (Gate::denies('access-menu', ['studentForm.store', 'fullaccess'])) {
+                if (Gate::denies('access-menu', ['storeStudent', 'fullaccess'])) {
                                 return response()->json([
                                     'status' => false,
                                     'message' => 'Unauthorized: No full access to create student.',
@@ -92,15 +110,7 @@ class Apicontroller extends Controller
                 );
             }
         }
-          /*  else{
-                    return response()->json(
-                        [
-                            'status' => false,
-                            'message' => 'unauthorized user admin can only access',
-                        ]
-                    ); 
-            }
-        } */
+         
         catch (Exception $e) {
             Log::error('Failed to Create  student data', ['error_message' => $e->getMessage()]);
             return response()->json(['status' => false, 'message' => 'Server Error']);
@@ -114,13 +124,13 @@ class Apicontroller extends Controller
     {
 
         try {
-            if (Gate::denies('access-menu', ['studentData.edit', 'fullaccess'])) {
+            if (Gate::denies('access-menu', ['updatestudent', 'fullaccess'])) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized: No full access to create student.',
                 ], 403);
             }
-            // if (Gate::denies('is_user')) {
+          
                 $edited_student = $studentService->editStudent($id);
 
             if ($edited_student) {
@@ -136,14 +146,7 @@ class Apicontroller extends Controller
                     ]
                 );
             }
-        // }else{
-        //         return response()->json(
-        //             [
-        //                 'status' => false,
-        //                 'message' => 'user connot be access',
-        //             ]
-        //         );
-        //     }
+        
         } catch (Exception $e) {
             Log::error('Failed to get edit  student data', ['error_message' => $e->getMessage()]);
             return response()->json(['status' => false, 'message' => 'Server Error']);
@@ -155,13 +158,13 @@ class Apicontroller extends Controller
     public function update(UpdateUserRequest $request, $id, StudentService $studentService)
     {
         try {
-            if (Gate::denies('access-menu', ['studentData.update', 'fullaccess'])) {
+            if (Gate::denies('access-menu', ['updatestudent', 'fullaccess'])) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized: No full access to create student.',
                 ], 403);
             }
-            // if (Gate::denies('is_user')) {
+            
                 $data = $request->validated();
             $updatedStudent = $studentService->updatestudent($data, $id);
             if ($updatedStudent) {
@@ -178,14 +181,7 @@ class Apicontroller extends Controller
                     ]
                 );
             }
-        // }else{
-        //         return response()->json(
-        //             [
-        //                 'status' => false,
-        //                 'message' => 'user connot be access',
-        //             ]
-        //         );
-        //     }
+        
         } catch (Exception $e) {
             Log::error('Failed to update student data', ['error_message' => $e->getMessage()]);
             return response()->json(['status' => false, 'message' => 'Server Error']);
@@ -199,18 +195,13 @@ class Apicontroller extends Controller
     {
         
             try {
-                if (Gate::denies('access-menu', ['studentData.delete', 'fullaccess'])) {
+                if (Gate::denies('access-menu', ['deleteStudent', 'fullaccess'])) {
                     return response()->json([
                         'status' => false,
                         'message' => 'Unauthorized: No full access to create student.',
                     ], 403);
                 }
-            // if (!Gate::allows('is_superadmin')) {
-            //     return response()->json([
-            //         'success' => false,
-            //         'error' => 'Only superadmin can delete students.'
-            //     ]);
-            // }
+           
 
             $student = Student::find($id);
             if (!$student) {
@@ -245,7 +236,7 @@ class Apicontroller extends Controller
     {
         try {
 
-             if (Gate::denies('access-menu', ['search', 'fullaccess'])) {
+             if (Gate::denies('access-menu', ['exportStudent', 'fullaccess'])) {
                     return response()->json([
                         'status' => false,
                         'message' => 'Unauthorized: No full access to create student.',
@@ -254,9 +245,9 @@ class Apicontroller extends Controller
             $search_data = $request->all();
 
             $students_data = $studentService->searchStudents($search_data);
-            // if (Gate::denies('is_user')) {
+       
 
-            if (Gate::denies('access-menu', ['search', 'fullaccess'])) {
+            if (Gate::denies('access-menu', ['exportStudent', 'fullaccess'])) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized: No full access to create student.',
@@ -272,16 +263,25 @@ class Apicontroller extends Controller
                     'Content-Disposition' => 'attachment; filename="students.pdf"'
                 ]);
             }
-            // }else{
-              
-            //         return response()->json(
-            //             [
-            //                 'status' => false,
-            //                 'message' => 'user connot be access',
-            //             ]
-            //         );
-            // }
-            return  studentResources::collection($students_data);
+          
+            return response()->json(
+                [
+                    'status' => true,
+                    'error' => 'success',
+                    'data' => studentResources::collection($students_data),
+                    'meta' => [
+                        'current_page' => $students_data->currentPage(),
+                        'last_page' => $students_data->lastPage(),
+                    ],
+                    'user' => [
+                        // 'role' => $user->roles->name,
+                        'can_delete' => Gate::allows('access-menu', ['deleteStudent', 'fullaccess']),
+                        'can_edit' => Gate::allows('access-menu', ['updatestudent', 'fullaccess']),
+                       
+                    ]
+
+                ]
+            );
         } catch (Exception $e) {
             Log::error('Failed to generatedPDF Or Search student data', ['error_message' => $e->getMessage()]);
             return response()->json(['status' => false, 'message' => 'Server Error']);
@@ -294,14 +294,15 @@ class Apicontroller extends Controller
     {
         try {
 
-            // if (Gate::allows('is_superadmin_or_admin')) {
+           
 
-            if (Gate::denies('access-menu', ['students.import', 'fullaccess'])) {
+            if (Gate::denies('access-menu', ['importStudent', 'fullaccess'])) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized: No full access to create student.',
                 ], 403);
             }
+
                 $request->validate([
                 'file' => 'required|file',
             ]);
@@ -327,13 +328,7 @@ class Apicontroller extends Controller
                     'status' => false,
                     'message' => 'Invalid action provided.'
                 ]);
-            }
-        // }else{
-        //         return response()->json([
-        //             'status' => false,
-        //             'message' => 'only admins can  access'
-        //         ]);
-        //     }
+            }   
         } catch (Exception $e) {
             Log::error('Failed to importe mobilenum Or importe  student data', ['error_message' => $e->getMessage()]);
             return response()->json(['status' => false, 'message' => 'Server Error']);
@@ -347,7 +342,7 @@ class Apicontroller extends Controller
     {
         try {
             // if (Gate::denies('is_user')) {
-            if (Gate::denies('access-menu', ['excel.export.initiate', 'fullaccess'])) {
+            if (Gate::denies('access-menu', ['exportStudent', 'fullaccess'])) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized: No full access to create student.',
@@ -384,7 +379,7 @@ class Apicontroller extends Controller
     public function excelExport($id)
     {
      try{
-            if (Gate::denies('access-menu', ['excel.export', 'fullaccess'])) {
+            if (Gate::denies('access-menu', ['exportStudent', 'fullaccess'])) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized: No full access to create student.',
@@ -392,7 +387,7 @@ class Apicontroller extends Controller
             }
             $excelExport= ExportInfo::find($id);
 
-            // if (Gate::denies('is_user')) {
+         
                 if($excelExport->status !== 'completed'){
                     return response()->json(['error'=>'file not found']);
                 }
@@ -401,12 +396,7 @@ class Apicontroller extends Controller
 
             return response()->download($path, $excelExport->file_name,['Content-Type'=>'text/csv']);
 
-            // }else{
-            //     return response()->json([
-            //         'status' => false,
-            //         'message' => 'only admins can  access'
-            //     ]);
-            // }
+          
         } catch (Exception $e) {
             Log::error('Failed to Export   student data', ['error_message' => $e->getMessage()]);
             return response()->json(['status' => false, 'message' => 'Server Error']);
@@ -417,14 +407,14 @@ class Apicontroller extends Controller
     public function exportHistory(StudentService $studentService)
     {
         try {
-            if (Gate::denies('access-menu', ['export.history', 'fullaccess'])) {
+            if (Gate::denies('access-menu', ['exportStudent', 'fullaccess'])) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized: No full access to create student.',
                 ], 403);
             }
 
-            // if (Gate::denies('is_user')) {
+          
                 $tasks = $studentService->exportHistory();
 
             return response()->json([
@@ -432,12 +422,7 @@ class Apicontroller extends Controller
                 'message' => 'Export history fetched successfully.',
                 'data' =>  ExportInfoResource::collection($tasks),
             ]);
-        // }else{
-        //         return response()->json([
-        //             'status' => false,
-        //             'message' => 'only admins can  access'
-        //         ]);
-        //     }
+     
         } catch (Exception $e) {
             Log::error('Failed to fetch export history', ['error_message' => $e->getMessage()]);
             return response()->json([
@@ -452,12 +437,7 @@ class Apicontroller extends Controller
     public function getmark(StudentService $studentService)
     {
         try {
-            if (Gate::denies('access-menu', ['getmark', 'fullaccess'])) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Unauthorized: No full access to create student.',
-                ], 403);
-            }
+
             $data = $studentService->getmark();
 
             if ($data) {
@@ -488,8 +468,8 @@ class Apicontroller extends Controller
     public function SendEmail(SendEmailRequest $request, StudentService $studentservices)
     {
         try {
-            // if (Gate::allows('is_superadmin_or_admin')) {
-            if (Gate::denies('access-menu', ['SendEmail', 'fullaccess'])) {
+           
+            if (Gate::denies('access-menu', ['sendMail', 'fullaccess'])) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized: No full access to create student.',
@@ -503,12 +483,7 @@ class Apicontroller extends Controller
                 'success' => true,
                 'message' => 'Email sent successfully!'
             ]);
-        // }else{
-        //         return response()->json([
-        //             'status' => false,
-        //             'message' => 'user can not be access',
-        //         ]);
-        //     }
+
         } catch (Exception $e) {
             Log::error('Failed to send email', ['error' => $e->getMessage()]);
 

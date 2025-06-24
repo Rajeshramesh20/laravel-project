@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 use App\Models\User;
 
@@ -16,7 +17,7 @@ class AuthServices{
 
   public function register(array $data)
   {
-      $user = User::create([
+    $user = User::create([
           'name' => $data['name'],
           'email' => $data['email'],
           'user_phone_num' => $data['user_phone_num'],
@@ -27,11 +28,12 @@ class AuthServices{
 
       return $user;
   }
+
+  
   //login athenticate user
 
   public function authenticate($request)
   {
-
       $userData = [
           'name' => $request['name'],
           'password' => $request['password'],
@@ -44,7 +46,6 @@ class AuthServices{
   {
       Auth::logout();
   }
-
 
   // send forgot password link to mail
   public function submitforgotpasswordform($data , $viwe)
@@ -82,4 +83,6 @@ class AuthServices{
           ->delete();
   }
 
+
+ 
 }

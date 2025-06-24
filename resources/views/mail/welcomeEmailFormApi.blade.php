@@ -74,6 +74,7 @@
                 } 
                 else if(xhr.status === 403 ){
                     alert(' your unauthorized  to send email')
+                    window.location.href = '/api/students-list';
                 }
                 else if (xhr.status === 422) {
                     const response = JSON.parse(xhr.responseText);

@@ -66,4 +66,7 @@ Route::prefix('api')->name('api.')->group(function () {
     Route::get('/studentEditForm/{id}', [ApiViewController::class, 'showStudentEditForm'])->name('studentEdit.Form');
     Route::get('/studentMarkList', [ApiViewController::class, 'showStudentMarkList'])->name('StudentMarkList');
     Route::get('email',[ApiViewController::class, 'sendWelcomeEmail'])->name('welcomeEmail');
+    Route::get('role',[ApiViewController::class, 'AddRole'])->name('storeRole');
+    Route::get('menu', [ApiViewController::class, 'AddMenu'])->name('storeMenu');
+    Route::get('permission',[ApiViewController::class, 'AddMenuPermission'])->name('menupermission');
 }); 

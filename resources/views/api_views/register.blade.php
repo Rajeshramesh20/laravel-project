@@ -47,9 +47,9 @@
             </div>
         </form>
 
-        <div class="sinupcontainer">
+        {{-- <div class="sinupcontainer">
             <a href="{{ route('api.login') }}" class="back">Back</a>
-        </div>
+        </div> --}}
     </div>
 </div>
 

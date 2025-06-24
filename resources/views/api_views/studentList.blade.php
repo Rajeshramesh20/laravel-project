@@ -46,7 +46,7 @@
     <div class="header_container">
         <img src="{{ asset('images/logo1.png') }}" alt="Logo" class="logo">
         <div class="logoutcontainer">
-            <a href='{{route('api.studentInset.Form')}}' class='create btn'>Add New</a>
+            <a href='{{route('api.studentInset.Form')}}' class='create btn' id="createBtn">Add New</a>
             <a href="{{route('api.studentList')}}" class="table_view table_btn">View Details</a>
             <button class='logout btn' id="logoutBtn">Logout</button>
         </div>
@@ -81,7 +81,7 @@
 
             <button class="search-btn" type="submit" id="searchBtn">search</button>
 
-            <div class="dropdown" onclick="toggleDropdown()">
+            <div class="dropdown" onclick="toggleDropdown('exportDropdown')" id="dowloadBtn">
                 <span class="download-btn"><i class="fas fa-download"></i> Download</span>
                 <div id="exportDropdown" class="export-btn">
                     <button type="submit" class="dowload-link pdfbtn" id="downloadPdfBtn">PDF</button> <br>
@@ -110,8 +110,18 @@
                 </div>
             </div>
         </form>
+
         <a href="{{route('api.StudentMarkList')}}" class="submit-btn getmark">Viwe student mark</a>
-        <a href="{{route('api.welcomeEmail')}}"  class="submit-btn getmark mail" >send mail</a>  
+        <a href="{{route('api.welcomeEmail')}}"  class="submit-btn getmark mail" id="sendmail">send mail</a> 
+        <div class="dropdown" onclick="toggleDropdown('permission')" id="permissionBtn" >
+            <span class="download-btn">Permission</span>
+            <div id="permission" class="export-btn">
+                <div class="addrole"><a href="{{route('api.storeRole')}}"  class="submit-btn rolebtn">Add role</a><i class="fas fa-eye" onclick="openListModal('ROLE LIST',roleUrl)"></i></div> 
+                <div class="addrole"> <a href="{{route('api.storeMenu')}}"  class="submit-btn rolebtn"  >Add Menu</a> <i class="fas fa-eye" onclick="openListModal('MENU LIST',menuUrl)"></i></div>
+                    <div class="addrole"><a href="{{route('api.menupermission')}}"  class="submit-btn rolebtn" >Add Permission</a> <i class="fas fa-eye"></i></div>
+            </div>
+        </div>
+   
     </div>
 
     <h1> STUDENT DETAILS FROM API</h1>
@@ -132,7 +142,7 @@
                 <th>Medium</th>
                 <th>Groups</th>
                 <th>Subjects</th>
-                <th>Actions</th>
+                <th class="actionBtnCol">Actions</th>
             </tr>
         </thead>
         <tbody id="tbody"></tbody>
@@ -147,6 +157,7 @@
     <div class="modal-content">
         <i id="closeModalBtn" class="fa-solid fa-xmark close" style="font-size: 24px;"></i>
         <h2>Export Excel History</h2>
+
         <table>
             <tr>
                 <th>Id</th>
@@ -161,6 +172,33 @@
         </table>
     </div>
 </div>
+
+{{-- modal --}}
+<!-- Reusable Data Modal -->
+<div id="dataModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h2 id="headding">menutable</h2>
+  
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+          </tr>
+        </thead>
+        <tbody id="modalTableBody">
+
+
+        </tbody>
+      </table>
+  
+      <div style="text-align:right; margin-top:10px;">
+        <button onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+  
 
 @endsection
 @section('footer')

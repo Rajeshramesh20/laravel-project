@@ -10,6 +10,8 @@ use App\Models\Menu;
 class RoleMenuPermission extends Model
 {
     use HasFactory;
+    protected $table = 'role_menu_permissions';
+    
     protected $fillable = ['role_id', 'menu_id', 'fullaccess', 'viewonly', 'hidden'];
 
     public function role()

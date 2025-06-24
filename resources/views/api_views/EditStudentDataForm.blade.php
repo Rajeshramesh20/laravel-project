@@ -282,6 +282,8 @@
 
                         }else if(xhr.status === 403 ){
                             alert(' your unauthorized  to get student');
+                            window.location.href = '/api/students-list';
+
                         }
                          else {
                             alert('Error loading student data');

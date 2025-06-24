@@ -4,6 +4,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Apicontroller;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\MenusController;
+use App\Http\Controllers\RoleMenuPermissionController;
 use Maatwebsite\Excel\Row;
 
 /*
@@ -51,5 +53,21 @@ Route::post('/forgot-password', [Apicontroller::class, 'submitforgotpasswordform
 Route::post('/reset-password', [Apicontroller::class, 'submitResetPasswordForm']);
 
 
+
+Route::middleware(['auth:api'])->group(function () {
 //add role
 Route::post('role',[RoleController::class, 'store']);
+Route::get('role/{id}',[RoleController::class,'edit']);
+Route::put('role/{id}',[RoleController::class,'update']);
+Route::delete('role/{id}',[RoleController::class, 'destroy']);
+Route::get('roleList',[RoleController::class, 'index']);
+//add menu
+Route::post('menu', [MenusController::class, 'store']);
+Route::get('menu/{id}', [MenusController::class, 'edit']);
+Route::put('menu/{id}', [MenusController::class, 'update']);
+Route::delete('menu/{id}', [MenusController::class, 'destroy']);
+Route::get('menuList', [MenusController::class, 'index']);
+//add menu role permission
+Route::post('MenuPermission', [RoleMenuPermissionController::class, 'store']);
+Route::get('MenuPermissionList',[RoleMenuPermissionController::class,'index']);
+});

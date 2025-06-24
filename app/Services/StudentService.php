@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -15,8 +14,7 @@ use App\Imports\StudentMobileNumberImportToFindStudentId;
 use App\Imports\StudentImport;
 use App\Jobs\ExportStudentsExcelJob;
 use Maatwebsite\Excel\Facades\Excel;
-
-
+use Illuminate\Support\Facades\Gate;
 
 class StudentService
 {
@@ -63,7 +61,7 @@ class StudentService
 
 
     // store student data
-
+    
     public function storeData($request)
     {
         $student = Student::create($request);
@@ -223,4 +221,5 @@ class StudentService
             }
         );
     }
+
 }

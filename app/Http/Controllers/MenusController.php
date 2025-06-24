@@ -2,32 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Roles;
+use App\Models\Menu;
 use Exception;
-use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\storeMenuOrRole;
-use App\Services\UserRoleMenuServices;
-use Illuminate\Support\Facades\Auth;
 
-class RoleController extends Controller
+use App\Services\UserRoleMenuServices;
+
+class MenusController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-
-    public function index(UserRoleMenuServices  $RoleMenuServices )
+    public function index(UserRoleMenuServices $RoleMenuservices)
     {
-        try{
-            $Roles = $RoleMenuServices->getAllRole();
-            if($Roles){
+        try {
+            $Menus = $RoleMenuservices->getAllMenu();
+            if ($Menus) {
                 return response()->json([
                     'status' => true,
                     'message' => 'success',
-                    'data' => $Roles ,
+                    'data' => $Menus,
                 ]);
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
 
             return response()->json(['status' => false, 'message' => 'Server Error']);
         }
@@ -36,8 +33,7 @@ class RoleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-
-    public function create(Request $request)
+    public function create()
     {
         //
     }
@@ -45,34 +41,31 @@ class RoleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-
-    public function store(storeMenuOrRole $request, UserRoleMenuServices  $RoleMenuServices)
+    public function store(storeMenuOrRole $request, UserRoleMenuServices $RoleMenuservices)
     {
         try {
-            $user_role = auth()->user();
-            $roleName = $user_role?->roles?->name;
-            if ($roleName !== 'superadmin') {
+
+            $user_role = auth()->user()?->roles?->name;
+            if ($user_role !== 'superadmin') {
                 return response()->json([
                     'status' => false,
                     'message' => 'Unauthorized:only super admin can access.',
                 ], 403);
             }
-
-            $request->merge(['table' => 'roles']);
+            $request->merge(['table' => 'menus']);
 
             $validated = $request->validated();
-
-            $role = $RoleMenuServices->storeRole($validated);
+            $menu = $RoleMenuservices->storeMenu($validated);
 
             return response()->json([
                 'status' => true,
-                'data' => $role,
-                'message' =>  'Role created successfully.'
+                'data' => $menu,
+                'message' => 'Menu created successfully.'
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Failed to create Role',
+                'message' => 'Failed to create Menu',
             ], 404);
         }
     }
@@ -80,7 +73,6 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      */
-
     public function show(string $id)
     {
         //
@@ -89,33 +81,27 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-
-    public function edit(UserRoleMenuServices  $RoleMenuServices, $id)
+    public function edit(string $id, UserRoleMenuServices $RoleMenuservices)
     {
         try {
-            $user = auth()->user();
-            // if(!$user || $user->roles->name !== "superadmin"){
-         
-            $roleName = $user->role?->name;
-            if ($roleName !== 'superadmin') {
+            $user_role = auth()->user()?->roles?->name;
+            if ($user_role !== 'superadmin') {
                 return response()->json([
                     'status' => false,
-                    // 'rolename' => $roleName,   
-                    'message' => 'Unauthorized:only super admin can access.',                    
+                    'message' => 'Unauthorized:only super admin can access.',
                 ], 403);
             }
 
-            $edit_user_role = $RoleMenuServices->editRole($id);
+            $edit_menu = $RoleMenuservices->editMenu($id);
 
             return response()->json([
                 'status' => true,
-                'data' => $edit_user_role,
+                'data' => $edit_menu,
             ]);
         } catch (Exception $e) {
-
             return response()->json([
                 'status' => false,
-                'message' => 'Role not found.',
+                'message' => 'Menu not found.',
             ], 404);
         }
     }
@@ -124,7 +110,7 @@ class RoleController extends Controller
      * Update the specified resource in storage.
      */
 
-    public function update(storeMenuOrRole $request, string $id, UserRoleMenuServices  $RoleMenuServices)
+    public function update(storeMenuOrRole $request, string $id, UserRoleMenuServices $RoleMenuservices)
     {
         try {
             $user_role = auth()->user()?->roles?->name;
@@ -134,19 +120,22 @@ class RoleController extends Controller
                     'message' => 'Unauthorized:only super admin can access.',
                 ], 403);
             }
-            $request->merge(['table' => 'roles', 'id' => $id]);
+
+            $request->merge(['table' => 'menus']);
+
             $validated = $request->validated();
-            $role = $RoleMenuServices->roleUpdate($validated, $id);
+
+            $menu = $RoleMenuservices->MenuUpdate($validated, $id);
 
             return response()->json([
                 'status' => true,
-                'data' => $role,
-                'message' => 'Role updated successfully.',
+                'data' => $menu,
+                'message' => 'Menu updated successfully.',
             ]);
         } catch (Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Role not found.',
+                'message' => 'menu not found.',
             ], 404);
         }
     }
@@ -154,11 +143,9 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-
-    public function destroy(string $id, UserRoleMenuServices  $RoleMenuServices)
+    public function destroy(string $id, UserRoleMenuServices $RoleMenuservices)
     {
         try {
-
             $user_role = auth()->user()?->roles?->name;
             if ($user_role !== 'superadmin') {
                 return response()->json([
@@ -166,16 +153,22 @@ class RoleController extends Controller
                     'message' => 'Unauthorized:only super admin can access.',
                 ], 403);
             }
-            $RoleMenuServices->RoleDestroy($id);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Role deleted successfully.',
-            ]);
+            $menu = $RoleMenuservices->MenuDestroy($id);
+            if ($menu) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'menu deleted successfully.',
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'menu not found.',
+                ], 404);
+            }
         } catch (Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Role not found.',
+                'message' => 'menu not found.',
             ], 404);
         }
     }

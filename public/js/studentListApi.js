@@ -26,8 +26,8 @@ document.addEventListener('click', function (e) {
 
 
 //for download button
-function toggleDropdown() {
-    var dropdown = document.getElementById('exportDropdown');
+function toggleDropdown(id) {
+    var dropdown = document.getElementById(id);
     dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
 
 }
@@ -71,6 +71,7 @@ function loadStudents(page = 1) {
     currentPage = page;
     if (!token) {
         alert("No token found. Please login first.");
+        window.location.href = "/api/login";
         return;
     }
 
@@ -86,8 +87,31 @@ function loadStudents(page = 1) {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
                 const students = response.data;
+                const canDelete = response.user.can_delete;
+                const canAddpermission = response.user.role;
+                const canedit = response.user.can_edit;
+                const canAddStudent = response.user.can_addStudent;
+                const canImport = response.user.can_import;
+                const canmail = response.user.can_mail;
+                const canexport = response.user.can_export;
+                if (!canAddStudent) {
+                    document.getElementById('createBtn').style.display = 'none';
+                }
+                if (!canImport) {
+                    document.getElementById('importForm').style.display = 'none';
+                   
+                }
+                if (!canmail) {
+                     document.getElementById('sendmail').style.display = 'none';
+                }
+                if (!canexport) {
+                    document.getElementById('dowloadBtn').style.display = 'none';
+                }
+                if (canAddpermission !== "superadmin") {
+                    document.getElementById('permissionBtn').style.display = 'none';
+                }
                 currentPage = response.meta.current_page;
-                studentTable(students);
+                studentTable(students, canDelete,canedit);
                 generatePagination(response.meta.last_page);
             }
             else if (xhr.status === 403) {
@@ -129,33 +153,59 @@ function generatePagination(lastPage) {
 }
 
 //student table tbody for list and search
-function studentTable(students) {
+function studentTable(students, canDelete,canedit) {
     const tbody = document.getElementById('tbody');
     students.forEach(student => {
         const row = document.createElement('tr');
         const subjects = student.subjects.map(sub => sub.subjectname).join('<br>');
         const group = student.group ? student.group.groupname : '';
 
-        row.innerHTML = `
-                    <td>${student.id}</td>
-                    <td>${student.firstname}</td>
-                    <td>${student.lastname}</td>
-                    <td>${student.email}</td>
-                    <td>${student.age}</td>
-                    <td>${student.gender}</td>
-                    <td>${student.date_of_birth}</td>
-                    <td>${student.mobile_number}</td>
-                    <td>${student.class}</td>
-                    <td>${student.batch}</td>
-                    <td>${student.medium}</td>
-                    <td>${group}</td>
-                    <td>${subjects}</td>
-                    <td><button class="edit-btn edite" data-id="${student.id}"><i class='fas fa-edit'
-                        title='Edit'></i></button>
-                        <button class="delete-btn delete" data-id="${student.id}"><i
-                            class='fas fa-trash' title='Delete'></i></button></td>
-                `;
+        const thAction = document.querySelector('th.actionBtnCol');
 
+  if (thAction) {
+        thAction.style.display = (canedit || canDelete) ? '' : 'none';
+    }
+
+        let actionButtons = " ";
+
+        if (canedit) {
+            actionButtons += 
+            `
+        <button class="edit-btn edite" data-id="${student.id}">
+            <i class='fas fa-edit' title='Edit'></i>
+        </button>
+    `;       
+        }
+    
+        if (canDelete) {
+            actionButtons += `
+            <button class="delete-btn delete" data-id="${student.id}">
+                <i class='fas fa-trash' title='Delete'></i>
+            </button>
+        `;
+           ;
+        }
+
+        const actionCell = (canedit || canDelete)
+            ? `<td class="actionBtnCol">${actionButtons}</td>`
+            : '';
+
+        row.innerHTML = `
+        <td>${student.id}</td>
+        <td>${student.firstname}</td>
+        <td>${student.lastname}</td>
+        <td>${student.email}</td>
+        <td>${student.age}</td>
+        <td>${student.gender}</td>
+        <td>${student.date_of_birth}</td>
+        <td>${student.mobile_number}</td>
+        <td>${student.class}</td>
+        <td>${student.batch}</td>
+        <td>${student.medium}</td>
+        <td>${group}</td>
+        <td>${subjects}</td>
+      ${actionCell}
+    `;
         tbody.appendChild(row);
     });
 }
@@ -235,7 +285,6 @@ function search(page=1) {
     xhr.open('GET', `http://127.0.0.1:8000/api/search?${paramsdata.toString()}`, true);
     xhr.setRequestHeader('Authorization', 'Bearer ' + token);
     xhr.setRequestHeader('Accept', 'application/json');
-
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             const tbody = document.getElementById('tbody');
@@ -243,8 +292,12 @@ function search(page=1) {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
                 const students = response.data;
+                const canDelete = response.user.can_delete;
+                const canedit = response.user.can_edit;
                 currentPage = response.meta.current_page;
-                studentTable(students);
+
+                
+                studentTable(students, canDelete, canedit);
                 generatePagination(response.meta.last_page);
                 searchdatapaginate = true;
 
@@ -479,3 +532,55 @@ document.getElementById('logoutBtn').addEventListener('click', function () {
     };
     xhr.send();
 });
+
+// roles  menu modal 
+function openListModal(heading,api) {
+    document.getElementById("headding").innerText = heading;
+    document.getElementById("dataModal").style.display = "block";
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", api, true);
+    xhr.setRequestHeader("Accept", "application/json");
+
+    const token = localStorage.getItem("token");
+    if (token) {
+        xhr.setRequestHeader("Authorization", "Bearer " + token);
+    }
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const res = JSON.parse(xhr.responseText);
+                if (res.status && Array.isArray(res.data)) {
+                    populateSimpleTable(res.data);
+                } else {
+                    alert("No data found.");
+                }
+            } else {
+                alert("Failed to load data.");
+            }
+        }
+    };
+
+    xhr.send();
+}
+
+function populateSimpleTable(items) {
+    const tbody = document.getElementById("modalTableBody");
+    tbody.innerHTML = '';
+
+    items.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${item.id}</td>
+        <td>${item.name}</td>`;
+        tbody.appendChild(row);
+    });
+}
+
+function closeModal() {
+    document.getElementById("dataModal").style.display = "none";
+}
+  
+const roleUrl = "http://127.0.0.1:8000/api/roleList";
+const menuUrl = "http://127.0.0.1:8000/api/menuList";
+const permissionurl = "http://127.0.0.1:8000/api/MenuPermissionList";

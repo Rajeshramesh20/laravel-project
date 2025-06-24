@@ -306,7 +306,7 @@ option{
 }
 .download-btn{
     background-color: #3592a5;
-    padding: 8px;
+    padding: 10px;
     border-radius: 6px;
         cursor: pointer;
         color: white;
@@ -392,7 +392,7 @@ background-color: #1d788b;
     background-color: #fff;
     margin: 15% auto;
     padding: 20px;
-    width: 60%;
+    width:60%;
     border-radius: 5px;
     position: relative;
 }
@@ -471,4 +471,17 @@ background-color: #1d788b;
 
 .error {
     color: red; 
+}
+.rolebtn{
+    /* display: block; */
+    text-decoration: none;
+    background-color: none;
+}
+.addrole{
+    display: block;
+    padding: 10px;
+    margin: 10px;
+}
+h3{
+    text-align: center;
 }
