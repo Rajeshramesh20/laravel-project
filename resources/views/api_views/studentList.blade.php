@@ -116,9 +116,9 @@
         <div class="dropdown" onclick="toggleDropdown('permission')" id="permissionBtn" >
             <span class="download-btn">Permission</span>
             <div id="permission" class="export-btn">
-                <div class="addrole"><a href="{{route('api.storeRole')}}"  class="submit-btn rolebtn">Add role</a><i class="fas fa-eye" onclick="openListModal('ROLE LIST',roleUrl)"></i></div> 
-                <div class="addrole"> <a href="{{route('api.storeMenu')}}"  class="submit-btn rolebtn"  >Add Menu</a> <i class="fas fa-eye" onclick="openListModal('MENU LIST',menuUrl)"></i></div>
-                    <div class="addrole"><a href="{{route('api.menupermission')}}"  class="submit-btn rolebtn" >Add Permission</a> <i class="fas fa-eye"></i></div>
+                <div class="addrole"><a href="{{route('api.storeRole')}}"  class="submit-btn rolebtn">Add role</a><i class="fas fa-eye"  onclick="openRoleModal()"></i></div> 
+                <div class="addrole"> <a href="{{route('api.storeMenu')}}"  class="submit-btn rolebtn"  >Add Menu</a> <i class="fas fa-eye" onclick="openMenuModal()"></i></div>
+                    <div class="addrole"><a href="{{route('api.menupermission')}}"  class="submit-btn rolebtn" >Add Permission</a> <i class="fas fa-eye" onclick="openPermissionModal()"></i></div>
             </div>
         </div>
    
@@ -174,7 +174,7 @@
 </div>
 
 {{-- modal --}}
-<!-- Reusable Data Modal -->
+<!-- role and menu Data Modal -->
 <div id="dataModal" class="modal" style="display:none;">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal()">&times;</span>
@@ -185,10 +185,10 @@
           <tr>
             <th>ID</th>
             <th>Name</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="modalTableBody">
-
 
         </tbody>
       </table>
@@ -198,10 +198,62 @@
       </div>
     </div>
   </div>
+  {{-- permission modal --}}
+  <div id="permissionModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h2 id="headding">Permission Table</h2>
   
+      <table >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Role ID</th>
+            <th>Menu ID</th>
+            <th>Full Access</th>
+            <th>View Only</th>
+            <th>Hidden</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="modalTablepermissionBody"></tbody>
+      </table>
+  
+      <div style="text-align:right; margin-top:10px;">
+        <button onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
 
 @endsection
 @section('footer')
 @include('layouts.form_footer')
 <script src="{{asset('js/studentListApi.js')}}"></script>
 @endsection
+{{-- 
+<div id="todoModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeTodoModal()">&times;</span>
+    <h2>Checker To-Do List</h2>
+
+    <table border="1" width="100%">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Maker</th>
+          <th>Made At</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="todoTableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<button onclick="loadTodoList()">Open To-Do List</button>
+
+
+
+
+--}}

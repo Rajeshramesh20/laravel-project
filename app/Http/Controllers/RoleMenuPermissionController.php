@@ -18,11 +18,15 @@ class RoleMenuPermissionController extends Controller
     {
         try {
             $RoleMenuPermission = $RoleMenuServices->getAllRoleMenuPermission();
+            $roles= $RoleMenuServices->getAllRole();
+            $menus= $RoleMenuServices->getAllmenu(); 
             if ($RoleMenuPermission) {
                 return response()->json([
                     'status' => true,
                     'message' => 'success',
                     'data' => $RoleMenuPermission,
+                    'roles'=> $roles,
+                    'menus'=>$menus
                 ]);
             }
         } catch (Exception $e) {
@@ -99,8 +103,30 @@ class RoleMenuPermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, UserRoleMenuServices $RoleMenuServices)
     {
-     //
+
+        try {
+
+            $user_role = auth()->user()?->roles?->name;
+            if ($user_role !== 'superadmin') {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Unauthorized:only super admin can access.',
+                ], 403);
+            }
+            $RoleMenuServices->RoleMenuPermissionDestroy($id);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Role deleted successfully.',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Role not found.',
+            ], 404);
+        }
     }
-}
+    }
+

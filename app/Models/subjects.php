@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Group;
-use APP\Models\student_subject_maping;
+use App\Models\temp_student;
 
 
 class subjects extends Model
@@ -15,6 +14,7 @@ class subjects extends Model
     {
         return $this->belongsToMany(Student::class);
     }
+  
 
     
 }

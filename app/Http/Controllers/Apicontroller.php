@@ -602,7 +602,87 @@ class Apicontroller extends Controller
             ]);
         }
 }
+
+//store tempStudent
+public function storeTempStudent(StoreUserRequest $request, StudentService $studentService ){
+        try {
+
+            $details = $request->validated();
+            $action = 'add';
+            $StoredData = $studentService->storeTempStudent($details,$action);
+            if ($StoredData) {
+                return response()->json([
+                    'status' => true,
+                    'data' => $StoredData,
+                ]);
+            } else {
+                return response()->json(
+                    [
+                        'status' => false,
+                        'message' => 'Failed to Create Student',
+                    ]
+                );
+            }
+        } catch (Exception $e) {
+            Log::error('Failed to Create  student data', ['error_message' => $e->getMessage()]);
+            return response()->json(['status' => false, 'message' => 'Server Error']);
+        }
+    }
 }
+
+
+
+
+/*
+public function index()
+{
+    // Get all pending requests
+    $todoList = TempStudent::where('action', 'add')->get();
+
+    return response()->json([
+        'status' => true,
+        'data' => $todoList,
+    ]);
+}
+
+public function approve($id)
+{
+    $temp = TempStudent::findOrFail($id);
+
+    // Copy data to real student table
+    $studentData = $temp->toArray();
+    unset($studentData['id']); // remove temp ID
+    $student = Student::create($studentData);
+
+    // Log status (optional)
+    StudentStatus::create([
+        'student_id' => $student->id,
+        'status' => 'accepted',
+        'approved_by' => auth()->user()->id,
+        'approved_at' => now(),
+    ]);
+
+    // Delete or mark temp row
+    $temp->delete();
+
+    return response()->json(['status' => true, 'message' => 'Approved and student added']);
+}
+
+public function reject($id)
+{
+    $temp = TempStudent::findOrFail($id);
+
+    StudentStatus::create([
+        'student_id' => $temp->id,
+        'status' => 'rejected',
+        'approved_by' => auth()->user()->id,
+        'approved_at' => now(),
+    ]);
+
+    $temp->delete();
+
+    return response()->json(['status' => true, 'message' => 'Rejected']);
+}*/
 
 
 // public function getData(Request $request){

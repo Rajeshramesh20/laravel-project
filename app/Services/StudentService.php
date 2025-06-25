@@ -9,12 +9,13 @@ use App\Models\Student;
 use App\Models\subjects;
 use App\Models\Group;
 use App\Models\ExportInfo;
+use App\Models\temp_student;
 
 use App\Imports\StudentMobileNumberImportToFindStudentId;
 use App\Imports\StudentImport;
 use App\Jobs\ExportStudentsExcelJob;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Gate;
+
 
 class StudentService
 {
@@ -221,5 +222,17 @@ class StudentService
             }
         );
     }
+
+    //store student to temp_student_table
+    public function storeTempStudent($data,$action='add'){
+       $data['subject_ids'] = array_map('intval', $data['subject_ids']);
+       $data['action'] = $action;
+       $data['maker_by'] = auth()->user()->id;
+       $data['maker_at'] = now();
+        $student = temp_student::create($data);
+        $student->save();
+        return $student;
+    }
+
 
 }

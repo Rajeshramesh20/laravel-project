@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\subjects;
+use App\Models\temp_student;
 
 class Group extends Model
 {
@@ -17,4 +18,5 @@ class Group extends Model
         return $this->hasMany(Student::class);
     }
 
+ 
 }

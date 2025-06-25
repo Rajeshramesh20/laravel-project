@@ -9,6 +9,8 @@ class student_subject_maping extends Model
 {
     use HasFactory;
     // protected $fillable = ['student_id', 'group_id', 'subject_id'];
+    
     protected $fillable = ['student_id', 'subject_id'];
-     protected $table = 'student_subject_mapings'; 
+     protected $table = 'student_subject_mapings';
+
 }

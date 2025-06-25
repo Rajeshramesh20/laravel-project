@@ -115,6 +115,18 @@ class UserRoleMenuServices
         ]);
         return true;
     }
+    //RoleMenuPermission Destroy
+    public function RoleMenuPermissionDestroy($id)
+    {
+        $RoleMenuPermission = RoleMenuPermission::find($id);
+
+        if (!$RoleMenuPermission) {
+            return false;
+        }
+        $RoleMenuPermission->delete();
+        return true;
+    }
+
 
     //get all Roll
 

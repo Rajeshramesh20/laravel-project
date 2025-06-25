@@ -178,19 +178,19 @@
                         <label for=""> Subjects:</label>
                     </th>
                     <td>
-                        <input type="checkbox" name="subject_ids[]" id="subject_tamil" value="1">
+                        <input type="checkbox" name="subject_ids[]" id="subject_tamil" value=1>
                         <label for="subject_tamil">tamil</label>
-                        <input type="checkbox" name="subject_ids[]" id="Kannada" value="2">
+                        <input type="checkbox" name="subject_ids[]" id="Kannada" value=2>
                         <label for="Kannada">Kannada</label>
-                        <input type="checkbox" name="subject_ids[]" id="Malayalam" value="3">
+                        <input type="checkbox" name="subject_ids[]" id="Malayalam" value=3>
                         <label for="Malayalam">Malayalam</label>
-                        <input type="checkbox" name="subject_ids[]" id="Telugu" value="4">
+                        <input type="checkbox" name="subject_ids[]" id="Telugu" value=4>
                         <label for="Telugu">Telugu</label>
-                        <input type="checkbox" name="subject_ids[]" id="Hindi" value="5">
+                        <input type="checkbox" name="subject_ids[]" id="Hindi" value=5>
                         <label for="Hindi">Hindi</label><br>
-                        <input type="checkbox" name="subject_ids[]" id="Sanskrit" value="6">
+                        <input type="checkbox" name="subject_ids[]" id="Sanskrit" value=6>
                         <label for="Sanskrit">Sanskrit</label>
-                        <input type="checkbox" name="subject_ids[]" id="French" value="7">
+                        <input type="checkbox" name="subject_ids[]" id="French" value=7>
                         <label for="French">French</label>
                     </td>
                 </tr>
@@ -223,10 +223,11 @@
 
         const form = this;
         const formData = new FormData(form);
-    
+      
+        // http://127.0.0.1:8000/api/student
         // Setup XMLHttpRequest
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', "http://127.0.0.1:8000/api/student", true);
+        xhr.open('POST', "http://127.0.0.1:8000/api/student/temp", true);
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.setRequestHeader('Authorization','Bearer ' + token);
        

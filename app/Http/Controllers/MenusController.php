@@ -55,6 +55,7 @@ class MenusController extends Controller
             $request->merge(['table' => 'menus']);
 
             $validated = $request->validated();
+            
             $menu = $RoleMenuservices->storeMenu($validated);
 
             return response()->json([

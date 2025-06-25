@@ -40,7 +40,7 @@ Route::middleware(['auth:api'])->group(function () {
 
     Route::post('sendmail',[Apicontroller::class, 'SendEmail']);
     Route::get('logout', [Apicontroller::class, 'logout'])->name('logout');
-    
+    Route::post('/student/temp', [Apicontroller::class, 'storeTempStudent'])->name('student.tempstore');
     // Route::get('getdata',[Apicontroller::class, 'getData']);
 });
 
@@ -70,4 +70,5 @@ Route::get('menuList', [MenusController::class, 'index']);
 //add menu role permission
 Route::post('MenuPermission', [RoleMenuPermissionController::class, 'store']);
 Route::get('MenuPermissionList',[RoleMenuPermissionController::class,'index']);
+Route::delete('MenuPermissionList/{id}', [RoleMenuPermissionController::class, 'destroy']);
 });
