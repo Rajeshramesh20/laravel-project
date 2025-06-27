@@ -628,22 +628,46 @@ public function storeTempStudent(StoreUserRequest $request, StudentService $stud
             return response()->json(['status' => false, 'message' => 'Server Error']);
         }
     }
+
+// get temp student 
+
+public function tempStudentIndex(StudentService $studentService){
+        try {
+           
+            $Temp_students_data = $studentService->getAllTempStudentData();
+            
+
+
+            if ($Temp_students_data) {
+                return response()->json(
+                    [
+                        'status' => true,
+                        'message' => 'success',
+                        'data' => $Temp_students_data, 
+                    ]
+                );
+            } else {
+                return response()->json(
+                    [
+                        'status' => false,
+                        'error' => 'error',
+                    ]
+                );
+            }
+        } catch (Exception $e) {
+            Log::error('Failed to fetch student data', ['error_message' => $e->getMessage()]);
+            return response()->json(['status' => false, 'message' => 'Server Error']);
+        }
+    }
+
+
 }
 
 
 
 
 /*
-public function index()
-{
-    // Get all pending requests
-    $todoList = TempStudent::where('action', 'add')->get();
 
-    return response()->json([
-        'status' => true,
-        'data' => $todoList,
-    ]);
-}
 
 public function approve($id)
 {
@@ -683,6 +707,9 @@ public function reject($id)
 
     return response()->json(['status' => true, 'message' => 'Rejected']);
 }*/
+
+
+
 
 
 // public function getData(Request $request){

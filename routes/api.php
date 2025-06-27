@@ -3,6 +3,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Apicontroller;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\MenusController;
 use App\Http\Controllers\RoleMenuPermissionController;
@@ -41,18 +42,17 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('sendmail',[Apicontroller::class, 'SendEmail']);
     Route::get('logout', [Apicontroller::class, 'logout'])->name('logout');
     Route::post('/student/temp', [Apicontroller::class, 'storeTempStudent'])->name('student.tempstore');
+    Route::get('tempStudent',[Apicontroller::class, 'tempStudentIndex'])->name('temp.student.list');
     // Route::get('getdata',[Apicontroller::class, 'getData']);
 });
 
+//auth
 Route::post('register', [Apicontroller::class, 'register'])->name('user.register');
 Route::post('authenticate', [Apicontroller::class, 'authenticate'])->name('authenticate');
 
 //forgot password
 Route::post('/forgot-password', [Apicontroller::class, 'submitforgotpasswordformapi']);
-
 Route::post('/reset-password', [Apicontroller::class, 'submitResetPasswordForm']);
-
-
 
 Route::middleware(['auth:api'])->group(function () {
 //add role
@@ -72,3 +72,14 @@ Route::post('MenuPermission', [RoleMenuPermissionController::class, 'store']);
 Route::get('MenuPermissionList',[RoleMenuPermissionController::class,'index']);
 Route::delete('MenuPermissionList/{id}', [RoleMenuPermissionController::class, 'destroy']);
 });
+
+
+Route::middleware(['auth:api'])->group(
+    function () {
+//invoice 
+Route::post('invoice',[InvoiceController::class,'store']);
+Route::get('generatepdf',[InvoiceController::class, 'generatePdf']);
+
+//customer data
+Route::post('customer', [InvoiceController::class, 'storeCustomerData']);
+    });

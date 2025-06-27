@@ -177,7 +177,7 @@
 <!-- role and menu Data Modal -->
 <div id="dataModal" class="modal" style="display:none;">
     <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <span class="close-btn" onclick="closeModaldata()">&times;</span>
       <h2 id="headding">menutable</h2>
   
       <table>
@@ -194,7 +194,7 @@
       </table>
   
       <div style="text-align:right; margin-top:10px;">
-        <button onclick="closeModal()">Close</button>
+        <button onclick="closeModaldata()">Close</button>
       </div>
     </div>
   </div>

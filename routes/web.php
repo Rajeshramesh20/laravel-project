@@ -70,3 +70,9 @@ Route::prefix('api')->name('api.')->group(function () {
     Route::get('menu', [ApiViewController::class, 'AddMenu'])->name('storeMenu');
     Route::get('permission',[ApiViewController::class, 'AddMenuPermission'])->name('menupermission');
 }); 
+
+//invoice
+Route::get('/invoice',function(){
+    return view('invoice');
+
+});

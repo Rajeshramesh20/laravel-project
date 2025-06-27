@@ -702,7 +702,7 @@ function deleteMenu(id) {
     }
 }
 //close datamodal
-function closeModal() {
+function closeModaldata() {
     document.getElementById("dataModal").style.display = "none";
 
 }
@@ -791,7 +791,7 @@ function closeModal() {
 
 
 /*
-const todoApiUrl = 'http://127.0.0.1:8000/api/todo-list';
+const todoApiUrl =http://127.0.0.1:8000/api/tempStudent;
 const approveApiUrl = 'http://127.0.0.1:8000/api/todo/approve/';
 const rejectApiUrl = 'http://127.0.0.1:8000/api/todo/reject/';
 

@@ -66,7 +66,7 @@ class StudentService
     public function storeData($request)
     {
         $student = Student::create($request);
-        $student->save();
+        $student->save();   
         $student->subjects()->attach($request['subject_ids']);
         return $student;
     }
@@ -233,6 +233,12 @@ class StudentService
         $student->save();
         return $student;
     }
+    //getAlltempstudentData
 
+
+    public function getAllTempStudentData(){
+        $todoList = temp_student::all();
+        return $todoList;
+    }
 
 }
