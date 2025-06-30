@@ -86,4 +86,33 @@ class InvoiceController extends Controller
     }
 }
 
+
+
+public function getAllCoustomer(InvoiceService $invoiceService ){
+    try{
+            $Customer = $invoiceService->getAllCostomer();
+            if ($Customer) {
+                return response()->json(
+                    [
+                        'status' => true,
+                        'message' => 'success',
+                        'data' => $Customer,
+                    ]
+                );
+            } else {
+                return response()->json(
+                    [
+                        'status' => false,
+                        'error' => 'error',
+                    ]
+                );
+            }
+        }catch(Exception $e){
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong.',
+                'error' => $e->getMessage(),
+            ], 500);
+    }
+}
 }

@@ -82,4 +82,5 @@ Route::get('generatepdf',[InvoiceController::class, 'generatePdf']);
 
 //customer data
 Route::post('customer', [InvoiceController::class, 'storeCustomerData']);
+Route::get('getCustomer', [InvoiceController::class, 'getAllCoustomer']);
     });

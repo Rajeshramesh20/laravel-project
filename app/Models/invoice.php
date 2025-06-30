@@ -14,20 +14,6 @@ class invoice extends Model
 
     protected $table = 'invoices';
 
-    // protected $fillable = [
-    //     'invoice_no',
-       
-    //     'invoice_date',
-    //     'invoice_due_date',
-    //     'payment_terms',
-    //     'invoice_status_id',
-    //     'created_by',
-    //     'updated_by',
-    //     'is_deleted'
-    // ];
-
-
-
     protected $fillable = [
         'invoice_no',
         'invoice_date',

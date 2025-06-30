@@ -21,9 +21,8 @@ return new class extends Migration
             $table->decimal('paid_amount', 11, 2)->nullable();
             $table->decimal('balance_amount', 11, 2)->nullable();
             $table->text('additional_text')->nullable();
-
-            $table->unsignedBigInteger('invoice_status_id');
-            $table->unsignedBigInteger('con_org_id');
+            $table->unsignedBigInteger('status_id')->nullable()->default(1);
+            $table->unsignedBigInteger('customer_id');
             $table->boolean('is_payment_received')->nullable();
 
             $table->string('location', 255)->nullable();
@@ -42,8 +41,8 @@ return new class extends Migration
             $table->boolean('is_deleted')->default(false);
 
             //  foreign keys
-            $table->foreign('invoice_status_id')->references('invoice_status_id')->on('invoice_statuses');
-            $table->foreign('con_org_id')->references('customer_id')->on('customers');
+            $table->foreign('status_id')->references('id')->on('invoice_statuses')->onDelete('set null');
+            $table->foreign('customer_id')->references('customer_id')->on('customers');
         });
     }
 

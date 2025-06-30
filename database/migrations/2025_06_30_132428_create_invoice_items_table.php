@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('location', 255)->nullable();
             $table->decimal('unit_price', 11, 2)->nullable();
             $table->decimal('net_amount', 11, 2)->nullable();
-            $table->string('vat_percent', 12)->nullable();
-            $table->decimal('vat_amount', 11, 2)->nullable();
+            $table->decimal('gst_percent', 5, 2)->nullable();
+            $table->decimal('gst_amount', 11, 2)->nullable();
             $table->decimal('total', 11, 2)->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
             $table->unsignedBigInteger('org_id')->nullable();

@@ -62,4 +62,8 @@ class ApiViewController extends Controller
     {
         return view('api_views.PermissionForm');
     }
+    public function Addinvoice()
+    {
+        return view('api_views.invoice_form');
+    }
 }

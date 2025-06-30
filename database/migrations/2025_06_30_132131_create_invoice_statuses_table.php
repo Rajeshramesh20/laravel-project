@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('invoice_statuses', function (Blueprint $table) {
-            $table->id('invoice_status_id');
+            $table->id();
             $table->string('invoice_status')->unique();
             $table->timestamps();
         });

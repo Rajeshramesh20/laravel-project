@@ -69,10 +69,11 @@ Route::prefix('api')->name('api.')->group(function () {
     Route::get('role',[ApiViewController::class, 'AddRole'])->name('storeRole');
     Route::get('menu', [ApiViewController::class, 'AddMenu'])->name('storeMenu');
     Route::get('permission',[ApiViewController::class, 'AddMenuPermission'])->name('menupermission');
+    Route::get('invoice',[ApiViewController::class, 'Addinvoice'])->name('invoice');
 }); 
 
 //invoice
-Route::get('/invoice',function(){
-    return view('invoice');
+// Route::get('/invoice',function(){
+//     return view('api_views.invoice_form')->name('invoice');
 
-});
+// });

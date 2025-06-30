@@ -113,6 +113,7 @@
 
         <a href="{{route('api.StudentMarkList')}}" class="submit-btn getmark">Viwe student mark</a>
         <a href="{{route('api.welcomeEmail')}}"  class="submit-btn getmark mail" id="sendmail">send mail</a> 
+        <a href="{{route('api.invoice')}}" class="submit-btn getmark mail">create invoice</a>
         <div class="dropdown" onclick="toggleDropdown('permission')" id="permissionBtn" >
             <span class="download-btn">Permission</span>
             <div id="permission" class="export-btn">

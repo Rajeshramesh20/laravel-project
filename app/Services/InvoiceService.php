@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\invoice;
 use App\Models\InvoiceItem;
-use App\Models\InvoiceStatus;
 use Illuminate\Support\Carbon;
 use App\Models\Customers;
 use App\Models\Addresses;
@@ -14,28 +13,44 @@ class InvoiceService
 
     public function store($data, $userId)
     {
-        $draftStatusId = InvoiceStatus::where('invoice_status', 'draft')->value('invoice_status_id');
+       
 
+
+        $totalAmount = 0;
+
+        foreach ($data['items'] as $item) {
+            $netAmount = $item['quantity'] * $item['unit_price'];
+            $gstPercent = $item['gst_percent'] ?? 0;
+            $gstAmount = $netAmount * $gstPercent / 100;
+            $total = $netAmount + $gstAmount;
+            $totalAmount += $total;
+        }
         //invoice table data
         $invoice =  invoice::create([
             'invoice_no' => $this->generateInvoiceNumber($data['invoice_date']??now()),
             'invoice_date' => $data['invoice_date'] ?? now(),
-            'con_org_id' => $data['con_org_id'],
+            'customer_id' => $data['customer_id'],
             'invoice_due_date' => $data['invoice_due_date'] ?? null,
-            'payment_terms' => $data['payment_terms'] ?? null,
-            'invoice_status_id'=> $draftStatusId ,
+            'total_amount'=> $totalAmount,
+            'additional_text' => $data['additional_text'] ?? null,
             'created_by' => $userId,
-
         ]);
 
          //item table data
         foreach ($data['items'] as $item) {
+            $netAmount = $item['quantity'] * $item['unit_price'];
+            $gstPercent = $item['gst_percent'] ?? 0;
+            $gstAmount = $netAmount * $gstPercent/100;
+            $total =  $netAmount + $gstAmount;
             InvoiceItem::create([
                 'invoice_id' => $invoice->id,
                 'item_name' => $item['item_name'],
                 'quantity' => $item['quantity'],
                 'unit_price' => $item['unit_price'],
-                'total' => $item['quantity'] * $item['unit_price'],
+                'net_amount' => $netAmount,
+                'gst_percent'=> $gstPercent,
+                'gst_amount'=> $gstAmount,
+                'total'=> $total,
                 'created_by' => $userId,
             ]);
         }
@@ -90,5 +105,11 @@ class InvoiceService
         $customer->address_id = $address->address_id;
         
         return $customer->fresh(['address']);
+    }
+
+    //get customer data
+    public function getAllCostomer(){
+        $coustomer = Customers::all();
+        return $coustomer;
     }
 }

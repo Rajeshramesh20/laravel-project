@@ -32,78 +32,21 @@
 <body>
     <div class="container py-5">
         <div class="row py-5">
-            <!-- logo -->
-            <div class="col-md-6">
-                <img src="images/twigik.png" alt="Twigik-logo">
-            </div>
             <!-- heading -->
             <div class="col-md-6 d-flex justify-content-end align-items-center">
-                <div class="fw-bold fs-4 text-uppercase">Invoice</div>
+                <div class="fw-bold fs-4 text-uppercase"></div>
             </div>
         </div>
+
         <div class="row pb-5">
             <div class="col-md-6">
-                <!-- address -->
-                <div class="d-flex flex-column">
-                    <span>Plot No 69, 3rd Floor, 11th Cross Street,</span>
-                    <span>Sai Ganesh Nagar, Pallikaranai,</span>
-                    <span>Chennai - 600100</span>
-                </div>
-                <!-- phone number -->
-                <div class="pb-3">
-                    Phone no:
-                    <a href="tel:+91-6383707076" class="text-decoration-none text-black">+91-6383707076</a>
-                </div>
-                <!-- gst no -->
-                <div class="text-uppercase">GSTIN: 33AALCT4631L1Z3</div>
+
             </div>
-            <!-- address -->
+
             <div class="col-md-6">
 
-                <!-- Invoice details section -->
-                <div class="row">
-                    <div class="col-md-3 fw-semibold d-flex justify-content-end align-items-center ti_heading">Invoice #:</div>
-                    <div class="col-md-9 text-uppercase d-flex align-items-center ti_subHeading">INV </div>
-                </div>
-
-                <!-- Invoice date -->
-                <div class="row pb-3">
-                    <div class="col-md-3 fw-semibold d-flex justify-content-end align-items-center ti_heading">Invoice date:</div>
-                    <div class="col-md-9 d-flex align-items-center ti_subHeading ">
-                        
-                        <input type="date" class="form-control w-50" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping">
-                      </div>
-                </div>
-
-                <!-- Billing details -->
-                <div class="row">
-                    <div class="col-md-3 fw-semibold d-flex justify-content-end align-items-center ti_heading">Bill to:</div>
-                    <div class="col-md-9 d-flex align-items-center ti_subHeading"><select class="form-select w-50" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                      </select>
-                    </div>
-                </div>
-
-                <!-- Billing address -->
-                <div class="row pb-3">
-                    <div class="col-md-3 fw-semibold d-flex justify-content-end align-items-start ti_heading">Address:</div>
-                    <div class="col-md-9 d-flex align-items-center ti_subHeading">
-                        10/176, Anjaneyar Kovil street, Santhosapuram,
-                        Vengaivasal, Chennai - 600073
-                    </div>
-                </div>
-
-                <!-- Billing phone number -->
-                <div class="row">
-                    <div class="col-md-3 fw-semibold d-flex justify-content-end align-items-center ti_heading">Phone:</div>
-                    <div class="col-md-9 d-flex align-items-center ti_subHeading">
-                        <a href="tel:+91-6383707076" class="text-decoration-none text-black">+91-6383707076</a>
-                    </div>
-                </div>
             </div>
+            
         </div>
 
         <!-- table -->

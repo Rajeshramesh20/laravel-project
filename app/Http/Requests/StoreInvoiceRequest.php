@@ -22,36 +22,19 @@ class StoreInvoiceRequest extends FormRequest
     public function rules(): array
     {
   
-        return [
-
-            'invoice_date' => 'required|date',
-            'invoice_due_date' => 'nullable|date|after_or_equal:invoice_date',
-            'payment_terms' => 'nullable|integer|min:0',
-            'con_org_id' => 'required|exists:customers,customer_id',
-
-            // Items array
-            'items' => 'required|array|min:1',
-            'items.*.item_name' => 'required|string|max:255',
-            'items.*.item_unit' => 'nullable|string|max:100',
-            'items.*.quantity' => 'required|numeric|min:0.01',
-            'items.*.unit_price' => 'required|numeric|min:0',
-            'items.*.details' => 'nullable|string',
-            'items.*.vat_percent' => 'nullable|string|max:10',
-        ];
-
 
         return [
             'invoice_date' => 'required|date',
             'invoice_due_date' => 'nullable|date|after_or_equal:invoice_date',
             'payment_terms' => 'nullable|integer|min:0',
-            'con_org_id' => 'required|exists:customers,customer_id',
-
+            'customer_id' => 'required|exists:customers,customer_id',
             'items' => 'required|array|min:1',
             'items.*.item_name' => 'required|string|max:255',
             'items.*.quantity' => 'required|numeric|min:0.01',
             'items.*.unit_price' => 'required|numeric|min:0',
-
+            'items.*.gst_percent'=>'required|numeric',
             'additional_text' => 'nullable|string',
+
             'location' => 'nullable|string|max:255',
             'company_id' => 'nullable|exists:companies,id',
             'org_id' => 'nullable|exists:organizations,id',
