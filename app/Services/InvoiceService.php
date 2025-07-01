@@ -14,8 +14,6 @@ class InvoiceService
     public function store($data, $userId)
     {
        
-
-
         $totalAmount = 0;
 
         foreach ($data['items'] as $item) {

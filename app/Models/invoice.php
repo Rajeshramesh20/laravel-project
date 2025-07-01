@@ -24,7 +24,7 @@ class invoice extends Model
         'balance_amount',
         'additional_text',
         'invoice_status_id',
-        'con_org_id',
+        'customer_id',
         'is_payment_received',
         'location',
         'company_id',
