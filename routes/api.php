@@ -78,7 +78,7 @@ Route::middleware(['auth:api'])->group(
     function () {
 //invoice 
 Route::post('invoice',[InvoiceController::class,'store']);
-Route::get('generatepdf',[InvoiceController::class, 'generatePdf']);
+Route::get('generatepdf/{id}',[InvoiceController::class, 'generatePdf']);
 
 //customer data
 Route::post('customer', [InvoiceController::class, 'storeCustomerData']);

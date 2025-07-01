@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Addresses extends Model
 {
     use HasFactory;
+    
+    protected $primaryKey = 'address_id';
 
     protected $fillable = [
         'reference_id',
@@ -21,5 +23,8 @@ class Addresses extends Model
         'updated_by',
         'is_deleted',
     ];
-
+    public function customer()
+    {
+        return $this->hasOne(Customers::class, 'address_id', 'address_id');
+    }
 }

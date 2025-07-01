@@ -7,6 +7,7 @@ use App\Models\InvoiceItem;
 use Illuminate\Support\Carbon;
 use App\Models\Customers;
 use App\Models\Addresses;
+use  Illuminate\Support\Facades\Log;
 
 class InvoiceService
 {
@@ -19,8 +20,8 @@ class InvoiceService
         foreach ($data['items'] as $item) {
             $netAmount = $item['quantity'] * $item['unit_price'];
             $gstPercent = $item['gst_percent'] ?? 0;
-            $gstAmount = $netAmount * $gstPercent / 100;
-            $total = $netAmount + $gstAmount;
+            $gstAmount = $netAmount * $gstPercent/100;
+            $total = $netAmount+$gstAmount;
             $totalAmount += $total;
         }
         //invoice table data
@@ -96,14 +97,11 @@ class InvoiceService
             'pincode' => $customerData['pincode'],
             'created_by' => $userId,
         ]);
-       
-        $customer = Customers::latest()->first();
-        $address = Addresses::latest()->first();
-
         $customer->address_id = $address->address_id;
-        
-        return $customer->fresh(['address']);
+        $customer->save();
+        return $customer;
     }
+    
 
     //get customer data
     public function getAllCostomer(){

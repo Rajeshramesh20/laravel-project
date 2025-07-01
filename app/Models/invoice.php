@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\InvoiceStatus;
 use App\Models\InvoiceItem;
+use App\Models\Customers;
 
 
 class invoice extends Model
@@ -13,7 +14,7 @@ class invoice extends Model
     use HasFactory;
 
     protected $table = 'invoices';
-
+ protected $primaryKey = 'invoice_id';
     protected $fillable = [
         'invoice_no',
         'invoice_date',
@@ -24,7 +25,7 @@ class invoice extends Model
         'balance_amount',
         'additional_text',
         'invoice_status_id',
-        'customer_id',
+        'con_org_id',
         'is_payment_received',
         'location',
         'company_id',
@@ -51,5 +52,8 @@ class invoice extends Model
         return $this->hasMany(InvoiceItem::class, 'invoice_id');
     }
 
-  
+    public function customer()
+    {
+        return $this->belongsTo(Customers::class, 'customer_id');
+    }
 }
