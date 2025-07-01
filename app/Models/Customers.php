@@ -27,4 +27,8 @@ class Customers extends Model
     {
         return $this->belongsTo(Addresses::class, 'address_id', 'address_id');
     }
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'customer_id');
+    }
 }

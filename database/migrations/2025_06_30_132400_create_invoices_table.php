@@ -24,9 +24,7 @@ return new class extends Migration
             $table->unsignedBigInteger('status_id')->nullable()->default(1);
             $table->unsignedBigInteger('customer_id');
             $table->boolean('is_payment_received')->nullable();
-
             $table->string('location', 255)->nullable();
-
             $table->unsignedBigInteger('company_id')->nullable();
             $table->unsignedBigInteger('org_id')->nullable();
             $table->unsignedBigInteger('company_financial_year_id')->nullable();
@@ -35,8 +33,8 @@ return new class extends Migration
             $table->enum('email_send_status', ['send', 'not_yet_send', 'failed', 'not_applicable'])->default('not_yet_send');
             $table->enum('created_type', ['internal', 'external'])->nullable();
             $table->enum('created_from', ['system', 'api', 'mdt', 'migration'])->nullable();
-            $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('updated_by');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
             $table->boolean('is_deleted')->default(false);
 
